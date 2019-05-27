@@ -25,6 +25,9 @@
 /* Begin PBXFileReference section */
 		0D2C7873229BE394000C4B28 /* xNotes */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = xNotes; sourceTree = BUILT_PRODUCTS_DIR; };
 		0D2C7876229BE394000C4B28 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		0D2C787F229BE3BF000C4B28 /* AppBaseDef.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppBaseDef.h; sourceTree = "<group>"; };
+		0D2C7880229BE3BF000C4B28 /* TZTActionFuctionTable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TZTActionFuctionTable.h; sourceTree = "<group>"; };
+		0D2C7882229BE3BF000C4B28 /* RegularExpression */ = {isa = PBXFileReference; lastKnownFileType = text; path = RegularExpression; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,8 +61,27 @@
 			isa = PBXGroup;
 			children = (
 				0D2C7876229BE394000C4B28 /* main.m */,
+				0D2C787D229BE3BF000C4B28 /* _DOC_FILE_ */,
 			);
 			path = xNotes;
+			sourceTree = "<group>";
+		};
+		0D2C787D229BE3BF000C4B28 /* _DOC_FILE_ */ = {
+			isa = PBXGroup;
+			children = (
+				0D2C787E229BE3BF000C4B28 /* def */,
+				0D2C7882229BE3BF000C4B28 /* RegularExpression */,
+			);
+			path = _DOC_FILE_;
+			sourceTree = "<group>";
+		};
+		0D2C787E229BE3BF000C4B28 /* def */ = {
+			isa = PBXGroup;
+			children = (
+				0D2C787F229BE3BF000C4B28 /* AppBaseDef.h */,
+				0D2C7880229BE3BF000C4B28 /* TZTActionFuctionTable.h */,
+			);
+			path = def;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
