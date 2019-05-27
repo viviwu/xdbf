@@ -28,6 +28,11 @@
 		0D2C787F229BE3BF000C4B28 /* AppBaseDef.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppBaseDef.h; sourceTree = "<group>"; };
 		0D2C7880229BE3BF000C4B28 /* TZTActionFuctionTable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TZTActionFuctionTable.h; sourceTree = "<group>"; };
 		0D2C7882229BE3BF000C4B28 /* RegularExpression */ = {isa = PBXFileReference; lastKnownFileType = text; path = RegularExpression; sourceTree = "<group>"; };
+		0D2C7883229BE5A0000C4B28 /* 顶点cif系统第三方接口说明.xls */ = {isa = PBXFileReference; lastKnownFileType = file; path = "顶点cif系统第三方接口说明.xls"; sourceTree = "<group>"; };
+		0D2C7884229BE6C6000C4B28 /* CIF系统Web一柜通标准第三方接口.xlsm */ = {isa = PBXFileReference; lastKnownFileType = file; path = "CIF系统Web一柜通标准第三方接口.xlsm"; sourceTree = "<group>"; };
+		0D2C7885229BE6C6000C4B28 /* CIF系统签署融资融券业务合同接口调用流程图.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "CIF系统签署融资融券业务合同接口调用流程图.pdf"; sourceTree = "<group>"; };
+		0D2C7887229BE70C000C4B28 /* BashShell.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = BashShell.sh; sourceTree = "<group>"; };
+		0D2C7888229BE738000C4B28 /* test_bash.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = test_bash.sh; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,6 +66,7 @@
 			isa = PBXGroup;
 			children = (
 				0D2C7876229BE394000C4B28 /* main.m */,
+				0D2C7888229BE738000C4B28 /* test_bash.sh */,
 				0D2C787D229BE3BF000C4B28 /* _DOC_FILE_ */,
 			);
 			path = xNotes;
@@ -69,6 +75,8 @@
 		0D2C787D229BE3BF000C4B28 /* _DOC_FILE_ */ = {
 			isa = PBXGroup;
 			children = (
+				0D2C7887229BE70C000C4B28 /* BashShell.sh */,
+				0D2C7886229BE6D2000C4B28 /* CSCO */,
 				0D2C787E229BE3BF000C4B28 /* def */,
 				0D2C7882229BE3BF000C4B28 /* RegularExpression */,
 			);
@@ -82,6 +90,16 @@
 				0D2C7880229BE3BF000C4B28 /* TZTActionFuctionTable.h */,
 			);
 			path = def;
+			sourceTree = "<group>";
+		};
+		0D2C7886229BE6D2000C4B28 /* CSCO */ = {
+			isa = PBXGroup;
+			children = (
+				0D2C7883229BE5A0000C4B28 /* 顶点cif系统第三方接口说明.xls */,
+				0D2C7885229BE6C6000C4B28 /* CIF系统签署融资融券业务合同接口调用流程图.pdf */,
+				0D2C7884229BE6C6000C4B28 /* CIF系统Web一柜通标准第三方接口.xlsm */,
+			);
+			path = CSCO;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
