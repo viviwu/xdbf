@@ -33,6 +33,8 @@
 		0D2C7885229BE6C6000C4B28 /* CIF系统签署融资融券业务合同接口调用流程图.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "CIF系统签署融资融券业务合同接口调用流程图.pdf"; sourceTree = "<group>"; };
 		0D2C7887229BE70C000C4B28 /* BashShell.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = BashShell.sh; sourceTree = "<group>"; };
 		0D2C7888229BE738000C4B28 /* test_bash.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = test_bash.sh; sourceTree = "<group>"; };
+		0DD0653F229F802A0053D2AE /* 投资堂标准接口20160505A.numbers */ = {isa = PBXFileReference; lastKnownFileType = file; path = "投资堂标准接口20160505A.numbers"; sourceTree = "<group>"; };
+		0DD06540229F802A0053D2AE /* 投资堂标准接口20160505B.numbers */ = {isa = PBXFileReference; lastKnownFileType = file; path = "投资堂标准接口20160505B.numbers"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,6 +97,8 @@
 		0D2C7886229BE6D2000C4B28 /* CSCO */ = {
 			isa = PBXGroup;
 			children = (
+				0DD0653F229F802A0053D2AE /* 投资堂标准接口20160505A.numbers */,
+				0DD06540229F802A0053D2AE /* 投资堂标准接口20160505B.numbers */,
 				0D2C7883229BE5A0000C4B28 /* 顶点cif系统第三方接口说明.xls */,
 				0D2C7885229BE6C6000C4B28 /* CIF系统签署融资融券业务合同接口调用流程图.pdf */,
 				0D2C7884229BE6C6000C4B28 /* CIF系统Web一柜通标准第三方接口.xlsm */,
