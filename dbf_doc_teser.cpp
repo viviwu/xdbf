@@ -50,16 +50,17 @@ int main() {
         printOrderAlgo(doc.readRecord(i));
     }
 
+    return 0;
     // Add a new order
     OrderAlgo newOrder = {};
-    std::strncpy(newOrder.ExternalId, "ORD20250424001", 31);
-    std::strncpy(newOrder.ClientName, "10026851", 256);
-    std::strncpy(newOrder.Symbol, "000001", 41);
+    std::strncpy(newOrder.ExternalId, "ORD20250424001", sizeof(newOrder.ExternalId));
+    std::strncpy(newOrder.ClientName, "10026851", sizeof(newOrder.ClientName));
+    std::strncpy(newOrder.Symbol, "000001", sizeof(newOrder.Symbol));
     newOrder.Side = SIDE_BUY;  // From atgo_dict.h
     newOrder.OrderQty = 1000;
     newOrder.OrdType = ORDTYPE_TWAP_PLUS;                     // From atgo_dict.h
-    std::strncpy(newOrder.EffTime, "20250424093000000", 18);  // 9:30:00.000
-    std::strncpy(newOrder.ExpTime, "20250424150000000", 18);  // 15:00:00.000
+    std::strncpy(newOrder.EffTime, "20250424093059000", sizeof(newOrder.EffTime));  // 9:30:59.000
+    std::strncpy(newOrder.ExpTime, "20250424150000000", sizeof(newOrder.ExpTime));  // 15:00:00.000
     newOrder.LimAction = 1;                                   // Yes, continue trading at limit
     newOrder.AftAction = 0;                                   // No, stop after expiration
     std::strncpy(newOrder.AlgoParam, "", 256);

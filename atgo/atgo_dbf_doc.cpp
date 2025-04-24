@@ -11,17 +11,17 @@ OrderAlgoDbfDoc::OrderAlgoDbfDoc() {}
 bool OrderAlgoDbfDoc::addOrderAlgo(const OrderAlgo& order) {
     std::vector<std::string> data;
     // 使用固定长度构造字符串，避免 \0
-    data.emplace_back(std::string(order.ExternalId, 30));
-    data.emplace_back(std::string(order.ClientName, 255));
-    data.emplace_back(std::string(order.Symbol, 40));
+    data.emplace_back(std::string(order.ExternalId, sizeof(order.ExternalId)));
+    data.emplace_back(std::string(order.ClientName, sizeof(order.ClientName)));
+    data.emplace_back(std::string(order.Symbol, sizeof(order.Symbol)));
     data.emplace_back(std::to_string(order.Side));
     data.emplace_back(std::to_string(order.OrderQty));
     data.emplace_back(std::to_string(order.OrdType));
-    data.emplace_back(std::string(order.EffTime, 17));
-    data.emplace_back(std::string(order.ExpTime, 17));
+    data.emplace_back(std::string(order.EffTime, sizeof(order.EffTime)));
+    data.emplace_back(std::string(order.ExpTime, sizeof(order.ExpTime)));
     data.emplace_back(std::to_string(order.LimAction));
     data.emplace_back(std::to_string(order.AftAction));
-    data.emplace_back(std::string(order.AlgoParam, 255));
+    data.emplace_back(std::string(order.AlgoParam, sizeof(order.AlgoParam)));
 
     // 截断超长部分并用空格填充
     for (auto& field : data) {

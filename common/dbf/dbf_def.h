@@ -3,238 +3,255 @@
 #define DBF_DEF_H
 
 #include <stdint.h>
-#include <time.h>
 #include <string.h>
+#include <time.h>
 
-#pragma pack(push, 1) // »∑±£Ω·ππÃÂ∞¥1◊÷Ω⁄∂‘∆Î
+#pragma pack(push, 1)  // Á°Æ‰øùÁªìÊûÑ‰ΩìÊåâ1Â≠óËäÇÂØπÈΩê
 
-// DBF∞Ê±æ¿‡–Õ√∂æŸ (∞Ê±æ∫≈µ⁄“ª∏ˆ◊÷Ω⁄)
+// DBFÁâàÊú¨Á±ªÂûãÊûö‰∏æ (ÁâàÊú¨Âè∑Á¨¨‰∏Ä‰∏™Â≠óËäÇ)
 typedef enum {
-    DBF_VERSION_FOXBASE_1          = 0x02, // FoxBASE
-    DBF_VERSION_FOXBASE_DBASE3     = 0x03, // dBASE III+/FoxBASE+/dBase III PLUS
-    DBF_VERSION_VISUAL_FOXPRO      = 0x30, // Visual FoxPro
-    DBF_VERSION_FOXPRO_2           = 0x31, // FoxPro 2.x
-    DBF_VERSION_DBASE4             = 0x43, // dBASE IV SQL table files, no memo
-    DBF_VERSION_DBASE4_MEMO        = 0x63, // dBASE IV SQL system files, with memo
-    DBF_VERSION_DBASE5             = 0x83, // dBASE V, no memo
-    DBF_VERSION_DBASE5_MEMO        = 0x8B, // dBASE V, with memo
-    DBF_VERSION_DBASE7             = 0x87, // dBASE VII, no memo
-    DBF_VERSION_DBASE7_MEMO        = 0x8C, // dBASE VII, with memo
-    DBF_VERSION_FOXPRO_2_MEMO      = 0xF5, // FoxPro 2.x with memo
-    DBF_VERSION_FOXBASE_DBASE3_MEMO= 0xFB, // FoxBASE+/dBASE III PLUS with memo
+    DBF_VERSION_FOXBASE_1 = 0x02,            // FoxBASE
+    DBF_VERSION_FOXBASE_DBASE3 = 0x03,       // dBASE III+/FoxBASE+/dBase III PLUS
+    DBF_VERSION_VISUAL_FOXPRO = 0x30,        // Visual FoxPro
+    DBF_VERSION_FOXPRO_2 = 0x31,             // FoxPro 2.x
+    DBF_VERSION_DBASE4 = 0x43,               // dBASE IV SQL table files, no memo
+    DBF_VERSION_DBASE4_MEMO = 0x63,          // dBASE IV SQL system files, with memo
+    DBF_VERSION_DBASE5 = 0x83,               // dBASE V, no memo
+    DBF_VERSION_DBASE5_MEMO = 0x8B,          // dBASE V, with memo
+    DBF_VERSION_DBASE7 = 0x87,               // dBASE VII, no memo
+    DBF_VERSION_DBASE7_MEMO = 0x8C,          // dBASE VII, with memo
+    DBF_VERSION_FOXPRO_2_MEMO = 0xF5,        // FoxPro 2.x with memo
+    DBF_VERSION_FOXBASE_DBASE3_MEMO = 0xFB,  // FoxBASE+/dBASE III PLUS with memo
 } DBF_Version;
 
-// DBFŒƒº˛Õ∑Ω·ππ (32 bytes)
+// DBFÊñá‰ª∂Â§¥ÁªìÊûÑ (32 bytes)
 typedef struct {
-    /* ◊÷Ω⁄ 0: ∞Ê±æ∫≈ (≤Œº˚DBF_Version√∂æŸ) */
+    /* Â≠óËäÇ 0: ÁâàÊú¨Âè∑ (ÂèÇËßÅDBF_VersionÊûö‰∏æ) */
     uint8_t version;
 
-    /* ◊÷Ω⁄ 1-3: ◊Ó∫Û∏¸–¬»’∆⁄ (YYMMDD)
-       YY: ƒÍ∑›-1900 (»Á2021-1900=121)
+    /* Â≠óËäÇ 1-3: ÊúÄÂêéÊõ¥Êñ∞Êó•Êúü (YYMMDD)
+       YY: Âπ¥‰ªΩ-1900 (Â¶Ç2021-1900=121)
        MM: 1-12
        DD: 1-31 */
     uint8_t last_update[3];
 
-    /* ◊÷Ω⁄ 4-7: Œƒº˛÷–µƒº«¬º ˝ (32Œª–°∂À) */
+    /* Â≠óËäÇ 4-7: Êñá‰ª∂‰∏≠ÁöÑËÆ∞ÂΩïÊï∞ (32‰ΩçÂ∞èÁ´Ø) */
     uint32_t num_records;
 
-    /* ◊÷Ω⁄ 8-9: Œƒº˛Õ∑¥Û–°(◊÷Ω⁄) (16Œª–°∂À) ∞¸¿®Õ∑+◊÷∂Œ√Ë ˆ+÷’÷π∑˚
+    /* Â≠óËäÇ 8-9: Êñá‰ª∂Â§¥Â§ßÂ∞è(Â≠óËäÇ) (16‰ΩçÂ∞èÁ´Ø) ÂåÖÊã¨Â§¥+Â≠óÊÆµÊèèËø∞+ÁªàÊ≠¢Á¨¶
      * Position of first data record */
     uint16_t header_size;
 
-    /* ◊÷Ω⁄ 10-11: √øÃıº«¬º¥Û–°(◊÷Ω⁄) (16Œª–°∂À) */
+    /* Â≠óËäÇ 10-11: ÊØèÊù°ËÆ∞ÂΩïÂ§ßÂ∞è(Â≠óËäÇ) (16‰ΩçÂ∞èÁ´Ø) */
     uint16_t record_size;
 
-    /* ◊÷Ω⁄ 12-13: ±£¡Ù (”√”⁄‘Á∆⁄∞Ê±æºÊ»›–‘) */
+    /* Â≠óËäÇ 12-13: ‰øùÁïô (Áî®‰∫éÊó©ÊúüÁâàÊú¨ÂÖºÂÆπÊÄß) */
     uint16_t reserved1;
 
-    /* ◊÷Ω⁄ 14:  ¬ŒÒ±Í÷æ (0x00=Œﬁ, 0x01=”–Œ¥ÕÍ≥… ¬ŒÒ) */
+    /* Â≠óËäÇ 14: ‰∫ãÂä°Ê†áÂøó (0x00=Êó†, 0x01=ÊúâÊú™ÂÆåÊàê‰∫ãÂä°) */
     uint8_t incomplete_transaction;
 
-    /* ◊÷Ω⁄ 15: º”√‹±Í÷æ (0x00=Œ¥º”√‹, 0x01=º”√‹) */
+    /* Â≠óËäÇ 15: Âä†ÂØÜÊ†áÂøó (0x00=Êú™Âä†ÂØÜ, 0x01=Âä†ÂØÜ) */
     uint8_t encryption_flag;
 
-    /* ◊÷Ω⁄ 16-27: ∂‡”√ªßª∑æ≥±£¡Ù */
+    /* Â≠óËäÇ 16-27: Â§öÁî®Êà∑ÁéØÂ¢É‰øùÁïô */
     uint8_t multi_user_reserved[12];
 
-    /* ◊÷Ω⁄ 28: MDX±Í÷æ (0x00=ŒﬁMDX, 0x01=”–MDX) */
+    /* Â≠óËäÇ 28: MDXÊ†áÂøó (0x00=Êó†MDX, 0x01=ÊúâMDX) */
     uint8_t mdx_flag;
 
-    /* ◊÷Ω⁄ 29: ”Ô—‘«˝∂Ø≥Ã–ÚID (≤Œº˚DBF_LanguageDriver√∂æŸ) */
+    /* Â≠óËäÇ 29: ËØ≠Ë®ÄÈ©±Âä®Á®ãÂ∫èID (ÂèÇËßÅDBF_LanguageDriverÊûö‰∏æ) */
     uint8_t language_driver;
 
-    /* ◊÷Ω⁄ 30-31: ±£¡Ù */
+    /* Â≠óËäÇ 30-31: ‰øùÁïô */
     uint16_t reserved3;
 } DBF_Header, DB_HEADER;
 
-// ◊÷∂Œ√Ë ˆΩ·ππ (32 bytes each)
+// Â≠óÊÆµÊèèËø∞ÁªìÊûÑ (32 bytes each)
 typedef struct {
-    /* ◊÷Ω⁄ 0-10: ◊÷∂Œ√˚(ASCIIZ, “‘0x00Ω·Œ≤) */
+    /* Â≠óËäÇ 0-10: Â≠óÊÆµÂêç(ASCIIZ, ‰ª•0x00ÁªìÂ∞æ) */
     char field_name[11];
 
-    /* ◊÷Ω⁄ 11: ◊÷∂Œ¿‡–Õ (≤Œº˚DBF_FieldType√∂æŸ) */
+    /* Â≠óËäÇ 11: Â≠óÊÆµÁ±ªÂûã (ÂèÇËßÅDBF_FieldTypeÊûö‰∏æ) */
     uint8_t field_type;
 
-    /* ◊÷Ω⁄ 12-15: ◊÷∂Œ ˝æ›µÿ÷∑(ƒ⁄¥Êµÿ÷∑£¨Œƒº˛÷–≤ª π”√£¨Õ®≥£Œ™0) */
+    /* Â≠óËäÇ 12-15: Â≠óÊÆµÊï∞ÊçÆÂú∞ÂùÄ(ÂÜÖÂ≠òÂú∞ÂùÄÔºåÊñá‰ª∂‰∏≠‰∏ç‰ΩøÁî®ÔºåÈÄöÂ∏∏‰∏∫0) */
     uint32_t field_data_address;
 
-    /* ◊÷Ω⁄ 16: ◊÷∂Œ≥§∂» (◊Ó¥Û254) */
+    /* Â≠óËäÇ 16: Â≠óÊÆµÈïøÂ∫¶ (ÊúÄÂ§ß254) */
     uint8_t field_length;
 
-    /* ◊÷Ω⁄ 17: –° ˝Œª ˝( ˝÷µ◊÷∂Œ) */
+    /* Â≠óËäÇ 17: Â∞èÊï∞‰ΩçÊï∞(Êï∞ÂÄºÂ≠óÊÆµ) */
     uint8_t decimal_count;
 
-    /* ◊÷Ω⁄ 18-19: ±£¡Ù (”√”⁄‘Á∆⁄∞Ê±æºÊ»›–‘) */
+    /* Â≠óËäÇ 18-19: ‰øùÁïô (Áî®‰∫éÊó©ÊúüÁâàÊú¨ÂÖºÂÆπÊÄß) */
     uint16_t reserved1;
 
-    /* ◊÷Ω⁄ 20: π§◊˜«¯ID */
+    /* Â≠óËäÇ 20: Â∑•‰ΩúÂå∫ID */
     uint8_t work_area_id;
 
-    /* ◊÷Ω⁄ 21-22: ±£¡Ù */
+    /* Â≠óËäÇ 21-22: ‰øùÁïô */
     uint16_t reserved2;
 
-    /* ◊÷Ω⁄ 23: SET FIELDS±Í÷æ (0x00=Œ¥…Ë÷√, 0x01=“—…Ë÷√) */
+    /* Â≠óËäÇ 23: SET FIELDSÊ†áÂøó (0x00=Êú™ËÆæÁΩÆ, 0x01=Â∑≤ËÆæÁΩÆ) */
     uint8_t set_fields_flag;
 
-    /* ◊÷Ω⁄ 24-30: ±£¡Ù */
+    /* Â≠óËäÇ 24-30: ‰øùÁïô */
     uint8_t reserved3[7];
 
-    /* ◊÷Ω⁄ 31: MDX◊÷∂Œ±Í÷æ (0x00=≤ª‘⁄MDX÷–, 0x01=‘⁄MDX÷–) */
+    /* Â≠óËäÇ 31: MDXÂ≠óÊÆµÊ†áÂøó (0x00=‰∏çÂú®MDX‰∏≠, 0x01=Âú®MDX‰∏≠) */
     uint8_t mdx_flag;
 } DBF_FieldDescriptor, DB_FIELD;
 
-// Œƒº˛÷’÷π∑˚ (1 byte)
+// Êñá‰ª∂ÁªàÊ≠¢Á¨¶ (1 byte)
 typedef struct {
-    /* ◊÷Ω⁄ 0: 0x0D±Ì æ◊÷∂Œ√Ë ˆΩ· ¯ */
+    /* Â≠óËäÇ 0: 0x0DË°®Á§∫Â≠óÊÆµÊèèËø∞ÁªìÊùü */
     uint8_t terminator;
 } DBF_HeaderTerminator;
 
-#define DBF_RECORD_DELETED  0x2A
-#define DBF_RECORD_VALID  0x20
-// º«¬º…æ≥˝±Í÷æ∫Õ Ù–‘¥Ê¥¢
+#define DBF_RECORD_DELETED 0x2A
+#define DBF_RECORD_VALID 0x20
+// ËÆ∞ÂΩïÂà†Èô§Ê†áÂøóÂíåÂ±ûÊÄßÂ≠òÂÇ®
 typedef struct {
-    /* ◊÷Ω⁄ 0: …æ≥˝±Í÷æ
-       0x20(ø’∏Ò)=Œ¥…æ≥˝, 0x2A(*)=“—…æ≥˝ */
+    /* Â≠óËäÇ 0: Âà†Èô§Ê†áÂøó
+       0x20(Á©∫Ê†º)=Êú™Âà†Èô§, 0x2A(*)=Â∑≤Âà†Èô§ */
     uint8_t deleted_flag;
 
-    /* ◊÷Ω⁄ 1-n:  µº ◊÷∂Œ ˝æ›(±‰≥§) */
+    /* Â≠óËäÇ 1-n: ÂÆûÈôÖÂ≠óÊÆµÊï∞ÊçÆ(ÂèòÈïø) */
     uint8_t data[];
 } DBF_Record;
 
-// Œƒº˛Ω· ¯±Í÷æ (1 byte)
+// Êñá‰ª∂ÁªìÊùüÊ†áÂøó (1 byte)
 typedef struct {
-    /* ◊÷Ω⁄ 0: 0x1A±Ì æŒƒº˛Ω· ¯ */
+    /* Â≠óËäÇ 0: 0x1AË°®Á§∫Êñá‰ª∂ÁªìÊùü */
     uint8_t eof_marker;
 } DBF_EOFMarker;
 
-// »’∆⁄¿‡–Õ◊™ªª∏®÷˙Ω·ππ
+// Êó•ÊúüÁ±ªÂûãËΩ¨Êç¢ËæÖÂä©ÁªìÊûÑ
 typedef struct {
-    uint8_t year;   // ƒÍ∑›-1900
+    uint8_t year;   // Âπ¥‰ªΩ-1900
     uint8_t month;  // 1-12
     uint8_t day;    // 1-31
 } DBF_Date;
 
-// ”Ô—‘«˝∂Ø≥Ã–ÚID√∂æŸ
+// ËØ≠Ë®ÄÈ©±Âä®Á®ãÂ∫èIDÊûö‰∏æ
 typedef enum {
     DBF_LANG_NONE = 0,
-    DBF_LANG_US = 0x01,          // USA MS-DOS (OEM)
-    DBF_LANG_INTL = 0x02,        // International MS-DOS (OEM)
-    DBF_LANG_WIN = 0x03,         // Windows ANSI
-    DBF_LANG_MAC = 0x04,         // Macintosh
-    DBF_LANG_EEUROPE = 0x64,     // Eastern European MS-DOS (OEM)
-    DBF_LANG_RUSSIAN = 0x65,     // Russian MS-DOS (OEM)
-    DBF_LANG_NORDIC = 0x66,      // Nordic MS-DOS (OEM)
-    DBF_LANG_ICELAND = 0x67,     // Icelandic MS-DOS (OEM)
-    DBF_LANG_CZECH = 0x68,       // Czech MS-DOS (OEM)
-    DBF_LANG_POLISH = 0x69,      // Polish MS-DOS (OEM)
-    DBF_LANG_GREEK = 0x6A,       // Greek MS-DOS (OEM)
-    DBF_LANG_TURKISH = 0x6B,     // Turkish MS-DOS (OEM)
-    DBF_LANG_CYRILLIC = 0x6C,    // Russian Windows (ANSI)
-    DBF_LANG_EEUROPE_WIN = 0x6D, // Eastern European Windows (ANSI)
-    DBF_LANG_GREEK_WIN = 0x6E,   // Greek Windows (ANSI)
-    DBF_LANG_CHINESE_GB = 0x78,  // Simplified Chinese Windows (ANSI)
-    DBF_LANG_KOREAN = 0x79,      // Korean Windows (ANSI)
-    DBF_LANG_JAPANESE = 0x7A,    // Japanese Windows (ANSI)
-    DBF_LANG_CHINESE_BIG5 = 0x7B,// Traditional Chinese Windows (ANSI)
-    DBF_LANG_THAI = 0x7C,        // Thai Windows (ANSI)
-    DBF_LANG_HEBREW = 0x7D,      // Hebrew Windows (ANSI)
-    DBF_LANG_ARABIC = 0x7E,      // Arabic Windows (ANSI)
+    DBF_LANG_US = 0x01,            // USA MS-DOS (OEM)
+    DBF_LANG_INTL = 0x02,          // International MS-DOS (OEM)
+    DBF_LANG_WIN = 0x03,           // Windows ANSI
+    DBF_LANG_MAC = 0x04,           // Macintosh
+    DBF_LANG_EEUROPE = 0x64,       // Eastern European MS-DOS (OEM)
+    DBF_LANG_RUSSIAN = 0x65,       // Russian MS-DOS (OEM)
+    DBF_LANG_NORDIC = 0x66,        // Nordic MS-DOS (OEM)
+    DBF_LANG_ICELAND = 0x67,       // Icelandic MS-DOS (OEM)
+    DBF_LANG_CZECH = 0x68,         // Czech MS-DOS (OEM)
+    DBF_LANG_POLISH = 0x69,        // Polish MS-DOS (OEM)
+    DBF_LANG_GREEK = 0x6A,         // Greek MS-DOS (OEM)
+    DBF_LANG_TURKISH = 0x6B,       // Turkish MS-DOS (OEM)
+    DBF_LANG_CYRILLIC = 0x6C,      // Russian Windows (ANSI)
+    DBF_LANG_EEUROPE_WIN = 0x6D,   // Eastern European Windows (ANSI)
+    DBF_LANG_GREEK_WIN = 0x6E,     // Greek Windows (ANSI)
+    DBF_LANG_CHINESE_GB = 0x78,    // Simplified Chinese Windows (ANSI)
+    DBF_LANG_KOREAN = 0x79,        // Korean Windows (ANSI)
+    DBF_LANG_JAPANESE = 0x7A,      // Japanese Windows (ANSI)
+    DBF_LANG_CHINESE_BIG5 = 0x7B,  // Traditional Chinese Windows (ANSI)
+    DBF_LANG_THAI = 0x7C,          // Thai Windows (ANSI)
+    DBF_LANG_HEBREW = 0x7D,        // Hebrew Windows (ANSI)
+    DBF_LANG_ARABIC = 0x7E,        // Arabic Windows (ANSI)
 } DBF_LanguageDriver;
 
-// ◊÷∂Œ¿‡–Õ√∂æŸ
+// Â≠óÊÆµÁ±ªÂûãÊûö‰∏æ
 typedef enum {
-    DBF_FIELD_CHAR = 'C',     // ◊÷∑˚–Õ
-    DBF_FIELD_NUMERIC = 'N',  //  ˝÷µ–Õ
-    DBF_FIELD_FLOAT = 'F',    // ∏°µ„–Õ
-    DBF_FIELD_DATE = 'D',     // »’∆⁄–Õ (YYYYMMDD)
-    DBF_FIELD_LOGICAL = 'L',  // ¬ﬂº≠–Õ (T/F/Y/N)
-    DBF_FIELD_MEMO = 'M',     // ±∏◊¢–Õ
-    DBF_FIELD_BINARY = 'B',   // ∂˛Ω¯÷∆–Õ
-    DBF_FIELD_GENERAL = 'G',  // Õ®”√–Õ(OLE∂‘œÛ)
-    DBF_FIELD_PICTURE = 'P',  // Õº∆¨–Õ
-    DBF_FIELD_CURRENCY = 'Y', // ªı±“–Õ
-    DBF_FIELD_DATETIME = 'T', // »’∆⁄ ±º‰–Õ
-    DBF_FIELD_INTEGER = 'I',  // ’˚–Õ
-    DBF_FIELD_VARCHAR = 'V',  // ±‰≥§◊÷∑˚–Õ
-    DBF_FIELD_TIMESTAMP = '@',//  ±º‰¥¡
-    DBF_FIELD_DOUBLE = 'O',   // À´æ´∂»∏°µ„
-    DBF_FIELD_AUTOINC = '+',  // ◊‘‘ˆ–Õ
+    DBF_FIELD_CHAR = 'C',       // Â≠óÁ¨¶Âûã
+    DBF_FIELD_NUMERIC = 'N',    // Êï∞ÂÄºÂûã
+    DBF_FIELD_FLOAT = 'F',      // ÊµÆÁÇπÂûã
+    DBF_FIELD_DATE = 'D',       // Êó•ÊúüÂûã (YYYYMMDD)
+    DBF_FIELD_LOGICAL = 'L',    // ÈÄªËæëÂûã (T/F/Y/N)
+    DBF_FIELD_MEMO = 'M',       // Â§áÊ≥®Âûã
+    DBF_FIELD_BINARY = 'B',     // ‰∫åËøõÂà∂Âûã
+    DBF_FIELD_GENERAL = 'G',    // ÈÄöÁî®Âûã(OLEÂØπË±°)
+    DBF_FIELD_PICTURE = 'P',    // ÂõæÁâáÂûã
+    DBF_FIELD_CURRENCY = 'Y',   // Ë¥ßÂ∏ÅÂûã
+    DBF_FIELD_DATETIME = 'T',   // Êó•ÊúüÊó∂Èó¥Âûã
+    DBF_FIELD_INTEGER = 'I',    // Êï¥Âûã
+    DBF_FIELD_VARCHAR = 'V',    // ÂèòÈïøÂ≠óÁ¨¶Âûã
+    DBF_FIELD_TIMESTAMP = '@',  // Êó∂Èó¥Êà≥
+    DBF_FIELD_DOUBLE = 'O',     // ÂèåÁ≤æÂ∫¶ÊµÆÁÇπ
+    DBF_FIELD_AUTOINC = '+',    // Ëá™Â¢ûÂûã
 } DBF_FieldType;
 
-#pragma pack(pop) // ª÷∏¥ƒ¨»œ∂‘∆Î∑Ω Ω
+#pragma pack(pop)  // ÊÅ¢Â§çÈªòËÆ§ÂØπÈΩêÊñπÂºè
 
-// ==================== ∏®÷˙∫Ø ˝ µœ÷ ====================
+// ==================== ËæÖÂä©ÂáΩÊï∞ÂÆûÁé∞ ====================
 
 /**
- * Ω‚ŒˆDBF»’∆⁄(YYMMDD)Œ™time_t
- * @param date DBF∏Ò Ωµƒ3◊÷Ω⁄»’∆⁄ ˝æ›
- * @return ∂‘”¶µƒtime_t÷µ
+ * Ëß£ÊûêDBFÊó•Êúü(YYMMDD)‰∏∫time_t
+ * @param date DBFÊ†ºÂºèÁöÑ3Â≠óËäÇÊó•ÊúüÊï∞ÊçÆ
+ * @return ÂØπÂ∫îÁöÑtime_tÂÄº
  */
 static inline time_t dbf_parse_date(const uint8_t date[3]) {
     struct tm tm = {0};
-    tm.tm_year = date[0] + 100; // DBFƒÍ∑›= µº -1900, tm_year= µº -1900
-    tm.tm_mon = date[1] - 1;     // ‘¬∑›0-11
+    tm.tm_year = date[0] + 100;  // DBFÂπ¥‰ªΩ=ÂÆûÈôÖ-1900, tm_year=ÂÆûÈôÖ-1900
+    tm.tm_mon = date[1] - 1;     // Êúà‰ªΩ0-11
     tm.tm_mday = date[2];
     return mktime(&tm);
 }
 
 /**
- * ∏Ò ΩªØtime_tŒ™DBF»’∆⁄(YYMMDD)
- * @param time  ±º‰÷µ
- * @param out_date  ‰≥ˆµƒ3◊÷Ω⁄DBF»’∆⁄
+ * Ê†ºÂºèÂåñtime_t‰∏∫DBFÊó•Êúü(YYMMDD)
+ * @param time Êó∂Èó¥ÂÄº
+ * @param out_date ËæìÂá∫ÁöÑ3Â≠óËäÇDBFÊó•Êúü
  */
 static inline void dbf_format_date(time_t time, uint8_t out_date[3]) {
     struct tm* tm = localtime(&time);
-    out_date[0] = tm->tm_year % 100; // »°∫Û¡ΩŒªƒÍ∑›
+    out_date[0] = tm->tm_year % 100;  // ÂèñÂêé‰∏§‰ΩçÂπ¥‰ªΩ
     out_date[1] = tm->tm_mon + 1;
     out_date[2] = tm->tm_mday;
 }
 
 /**
- * ◊÷∂Œ¿‡–Õ◊™ø…∂¡◊÷∑˚¥Æ
- * @param type ◊÷∂Œ¿‡–Õ◊÷∑˚
- * @return ¿‡–Õ√Ë ˆ◊÷∑˚¥Æ
+ * Â≠óÊÆµÁ±ªÂûãËΩ¨ÂèØËØªÂ≠óÁ¨¶‰∏≤
+ * @param type Â≠óÊÆµÁ±ªÂûãÂ≠óÁ¨¶
+ * @return Á±ªÂûãÊèèËø∞Â≠óÁ¨¶‰∏≤
  */
 static inline const char* dbf_field_type_to_str(uint8_t type) {
-    switch(type) {
-        case DBF_FIELD_CHAR: return "Character";
-        case DBF_FIELD_NUMERIC: return "Numeric";
-        case DBF_FIELD_FLOAT: return "Float";
-        case DBF_FIELD_DATE: return "Date";
-        case DBF_FIELD_LOGICAL: return "Logical";
-        case DBF_FIELD_MEMO: return "Memo";
-        case DBF_FIELD_BINARY: return "Binary";
-        case DBF_FIELD_GENERAL: return "General(OLE)";
-        case DBF_FIELD_PICTURE: return "Picture";
-        case DBF_FIELD_CURRENCY: return "Currency";
-        case DBF_FIELD_DATETIME: return "DateTime";
-        case DBF_FIELD_INTEGER: return "Integer";
-        case DBF_FIELD_VARCHAR: return "VarChar";
-        case DBF_FIELD_TIMESTAMP: return "Timestamp";
-        case DBF_FIELD_DOUBLE: return "Double";
-        case DBF_FIELD_AUTOINC: return "AutoIncrement";
-        default: return "Unknown";
+    switch (type) {
+        case DBF_FIELD_CHAR:
+            return "Character";
+        case DBF_FIELD_NUMERIC:
+            return "Numeric";
+        case DBF_FIELD_FLOAT:
+            return "Float";
+        case DBF_FIELD_DATE:
+            return "Date";
+        case DBF_FIELD_LOGICAL:
+            return "Logical";
+        case DBF_FIELD_MEMO:
+            return "Memo";
+        case DBF_FIELD_BINARY:
+            return "Binary";
+        case DBF_FIELD_GENERAL:
+            return "General(OLE)";
+        case DBF_FIELD_PICTURE:
+            return "Picture";
+        case DBF_FIELD_CURRENCY:
+            return "Currency";
+        case DBF_FIELD_DATETIME:
+            return "DateTime";
+        case DBF_FIELD_INTEGER:
+            return "Integer";
+        case DBF_FIELD_VARCHAR:
+            return "VarChar";
+        case DBF_FIELD_TIMESTAMP:
+            return "Timestamp";
+        case DBF_FIELD_DOUBLE:
+            return "Double";
+        case DBF_FIELD_AUTOINC:
+            return "AutoIncrement";
+        default:
+            return "Unknown";
     }
 }
 
-#endif // DBF_DEF_H
+#endif  // DBF_DEF_H

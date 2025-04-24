@@ -1,15 +1,29 @@
 #include "dbf_doc.h"
-#include <ctime>
-#include <cstring>
-#include <stdexcept>
-#include <cassert>
-#include <iostream>
 
-DbfDoc::DbfDoc() : isModified_(false) {
-    std::memset(&header_, 0, sizeof(DB_HEADER));
-}
+#include <cassert>
+#include <cstring>
+#include <ctime>
+#include <iostream>
+#include <stdexcept>
+
+DbfDoc::DbfDoc() : isModified_(false) { std::memset(&header_, 0, sizeof(DB_HEADER)); }
 
 DbfDoc::~DbfDoc() {}
+
+// a func to debug DB_HEADER member value info
+void DbfDoc::debugPrintHeader() {
+    printf("DBF Header:\n");
+    printf("Version: %02X\n", header_.version);
+    printf("Last Update: %02X%02X%02X\n", header_.last_update[0], header_.last_update[1],
+           header_.last_update[2]);
+    printf("Number of Records: %u\n", header_.num_records);
+    printf("Header Size: %u\n", header_.header_size);
+    printf("Record Size: %u\n", header_.record_size);
+    printf("Incomplete Transaction: %02X\n", header_.incomplete_transaction);
+    printf("Encryption Flag: %02X\n", header_.encryption_flag);
+    printf("MDX Flag: %02X\n", header_.mdx_flag);
+    printf("Language Driver: %02X\n", header_.language_driver);
+}
 
 bool DbfDoc::open(const std::string& filename) {
     std::ifstream ifs(filename, std::ios::binary);
@@ -19,6 +33,8 @@ bool DbfDoc::open(const std::string& filename) {
     if (ifs.gcount() != sizeof(DB_HEADER)) return false;
 
     if (!validateHeader()) return false;
+
+    debugPrintHeader();
 
     fields_.clear();
     char byte;
@@ -43,6 +59,8 @@ bool DbfDoc::open(const std::string& filename) {
     ifs.seekg(header_.header_size, std::ios::beg);
     ifs.read(data_.data(), data_size);
     if (ifs.gcount() != static_cast<std::streamsize>(data_size)) return false;
+
+    debugPrint();
 
     filename_ = filename;
     isModified_ = false;
@@ -107,14 +125,18 @@ bool DbfDoc::modifyRecord(uint32_t index, const std::vector<std::string>& data) 
 }
 
 bool DbfDoc::addRecord(const std::vector<std::string>& data) {
-    if (!validateData(data)) return false;
+    if (!validateData(data)) {
+        std::cerr << "data.size()=" << data.size() << " != fields_.size()=" << fields_.size()
+                  << std::endl;
+        return false;
+    }
 
     // Recalculate expected length to ensure consistency
     uint16_t expected_length = calculateRecordLength() + 1;
     if (header_.record_size != expected_length) {
         std::cerr << "Record length mismatch: header=" << header_.record_size
                   << ", expected=" << expected_length << std::endl;
-        header_.record_size = expected_length; // Fix it
+        header_.record_size = expected_length;  // Fix it
     }
 
     std::vector<char> new_record(header_.record_size, ' ');
@@ -215,6 +237,7 @@ void DbfDoc::debugPrint() const {
     std::cout << "  Num Records: " << header_.num_records << std::endl;
     std::cout << "  Fields: " << fields_.size() << std::endl;
     for (size_t i = 0; i < fields_.size(); ++i) {
-        std::cout << "    " << fields_[i].field_name << ": " << (int)fields_[i].field_length << std::endl;
+        std::cout << "    " << fields_[i].field_name << ": " << (int)fields_[i].field_length
+                  << std::endl;
     }
 }
