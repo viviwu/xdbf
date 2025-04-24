@@ -18,7 +18,7 @@ public:
     bool create(const std::string& filename);
 
 private:
-    std::vector<DBFField> getOrderAlgoFields() const;
+    std::vector<DB_FIELD> getOrderAlgoFields() const;
 };
 
 #endif // ORDER_ALGO_DBF_DOC_H

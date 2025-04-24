@@ -1,194 +1,240 @@
-/**
- * @program: atgo_dbf
- * @description: [...]
- * @author: wuxw
- * @create: 2022-05-23 16:31
- **/
+// dbf_def.h
+#ifndef DBF_DEF_H
+#define DBF_DEF_H
 
-/******************************************************************/
+#include <stdint.h>
+#include <time.h>
+#include <string.h>
 
-#ifndef DBF_STRUCT_H
-#define DBF_STRUCT_H
+#pragma pack(push, 1) // 确保结构体按1字节对齐
 
-#include <sys/stat.h>
-#include <sys/types.h>
+// DBF版本类型枚举 (版本号第一个字节)
+typedef enum {
+    DBF_VERSION_FOXBASE_1          = 0x02, // FoxBASE
+    DBF_VERSION_FOXBASE_DBASE3     = 0x03, // dBASE III+/FoxBASE+/dBase III PLUS
+    DBF_VERSION_VISUAL_FOXPRO      = 0x30, // Visual FoxPro
+    DBF_VERSION_FOXPRO_2           = 0x31, // FoxPro 2.x
+    DBF_VERSION_DBASE4             = 0x43, // dBASE IV SQL table files, no memo
+    DBF_VERSION_DBASE4_MEMO        = 0x63, // dBASE IV SQL system files, with memo
+    DBF_VERSION_DBASE5             = 0x83, // dBASE V, no memo
+    DBF_VERSION_DBASE5_MEMO        = 0x8B, // dBASE V, with memo
+    DBF_VERSION_DBASE7             = 0x87, // dBASE VII, no memo
+    DBF_VERSION_DBASE7_MEMO        = 0x8C, // dBASE VII, with memo
+    DBF_VERSION_FOXPRO_2_MEMO      = 0xF5, // FoxPro 2.x with memo
+    DBF_VERSION_FOXBASE_DBASE3_MEMO= 0xFB, // FoxBASE+/dBASE III PLUS with memo
+} DBF_Version;
 
-#if defined(__unix__) || (defined(__APPLE__) && defined(__MACH__))
-    #include <unistd.h>
-    // refers to the urtc/fcntl.h definition in Windows Kit:
-    #define O_BINARY 0x8000  // file mode is binary (untranslated)
-
-#elif defined(_WIN32)
-    #include <io.h>
-    #include <windows.h>
-    #ifndef __ANUBISNET_TYPES__
-        #define __ANUBISNET_TYPES__
-typedef UINT32 u_int32_t;
-// Windows does not know UINT16 types
-typedef unsigned short u_int16_t;
-    #endif
-
-#elif defined(__MSDOS__)
-    #include <io.h>
-
-#else
-    #include <unistd.h>
-#endif
-
-#pragma warning(disable : 4018)
-#pragma warning(disable : 4996)
-
-/**
- * @brief Structure representing the fixed portion of the DBF file header.
- *
- * The DBF file header starts at byte 0 and contains metadata about the file,
- * such as the file type, number of records, and the position where data records begin.
- * All multi-byte integers are stored in little-endian format.
- */
-#pragma pack(push, 1)
+// DBF文件头结构 (32 bytes)
 typedef struct {
-    uint8_t file_type;  // Byte 0: DBF file type (e.g., 0x03 for FoxBASE+/dBASE III Plus, no memo)
-    uint8_t last_update[3];   // Bytes 1-3: Last update in YYMMDD format
-    uint32_t num_records;     // Bytes 4-7: Number of records in the file (little-endian)
-    uint16_t pos_first_data;  // Bytes 8-9: Byte offset of the first data record (little-endian)
-    uint16_t record_length;   // Bytes 10-11: Length of one data record, including delete flag
-                              // (little-endian)
-    uint8_t reserved1[16];    // Bytes 12-27: Reserved bytes
-    uint8_t table_flags;  // Byte 28: Table flags (bitwise: 0x01 = has .cdx, 0x02 = has Memo, 0x04 =
-                          // is .dbc)
-    uint8_t code_page_mark;  // Byte 29: Code page mark
-    uint8_t reserved2[2];    // Bytes 30-31: Reserved, contains 0x00
-} DBFHeader;
-#pragma pack(pop)
+    /* 字节 0: 版本号 (参见DBF_Version枚举) */
+    uint8_t version;
+
+    /* 字节 1-3: 最后更新日期 (YYMMDD)
+       YY: 年份-1900 (如2021-1900=121)
+       MM: 1-12
+       DD: 1-31 */
+    uint8_t last_update[3];
+
+    /* 字节 4-7: 文件中的记录数 (32位小端) */
+    uint32_t num_records;
+
+    /* 字节 8-9: 文件头大小(字节) (16位小端) 包括头+字段描述+终止符
+     * Position of first data record */
+    uint16_t header_size;
+
+    /* 字节 10-11: 每条记录大小(字节) (16位小端) */
+    uint16_t record_size;
+
+    /* 字节 12-13: 保留 (用于早期版本兼容性) */
+    uint16_t reserved1;
+
+    /* 字节 14: 事务标志 (0x00=无, 0x01=有未完成事务) */
+    uint8_t incomplete_transaction;
+
+    /* 字节 15: 加密标志 (0x00=未加密, 0x01=加密) */
+    uint8_t encryption_flag;
+
+    /* 字节 16-27: 多用户环境保留 */
+    uint8_t multi_user_reserved[12];
+
+    /* 字节 28: MDX标志 (0x00=无MDX, 0x01=有MDX) */
+    uint8_t mdx_flag;
+
+    /* 字节 29: 语言驱动程序ID (参见DBF_LanguageDriver枚举) */
+    uint8_t language_driver;
+
+    /* 字节 30-31: 保留 */
+    uint16_t reserved3;
+} DBF_Header, DB_HEADER;
+
+// 字段描述结构 (32 bytes each)
+typedef struct {
+    /* 字节 0-10: 字段名(ASCIIZ, 以0x00结尾) */
+    char field_name[11];
+
+    /* 字节 11: 字段类型 (参见DBF_FieldType枚举) */
+    uint8_t field_type;
+
+    /* 字节 12-15: 字段数据地址(内存地址，文件中不使用，通常为0) */
+    uint32_t field_data_address;
+
+    /* 字节 16: 字段长度 (最大254) */
+    uint8_t field_length;
+
+    /* 字节 17: 小数位数(数值字段) */
+    uint8_t decimal_count;
+
+    /* 字节 18-19: 保留 (用于早期版本兼容性) */
+    uint16_t reserved1;
+
+    /* 字节 20: 工作区ID */
+    uint8_t work_area_id;
+
+    /* 字节 21-22: 保留 */
+    uint16_t reserved2;
+
+    /* 字节 23: SET FIELDS标志 (0x00=未设置, 0x01=已设置) */
+    uint8_t set_fields_flag;
+
+    /* 字节 24-30: 保留 */
+    uint8_t reserved3[7];
+
+    /* 字节 31: MDX字段标志 (0x00=不在MDX中, 0x01=在MDX中) */
+    uint8_t mdx_flag;
+} DBF_FieldDescriptor, DB_FIELD;
+
+// 文件终止符 (1 byte)
+typedef struct {
+    /* 字节 0: 0x0D表示字段描述结束 */
+    uint8_t terminator;
+} DBF_HeaderTerminator;
+
+#define DBF_RECORD_DELETED  0x2A
+#define DBF_RECORD_VALID  0x20
+// 记录删除标志和属性存储
+typedef struct {
+    /* 字节 0: 删除标志
+       0x20(空格)=未删除, 0x2A(*)=已删除 */
+    uint8_t deleted_flag;
+
+    /* 字节 1-n: 实际字段数据(变长) */
+    uint8_t data[];
+} DBF_Record;
+
+// 文件结束标志 (1 byte)
+typedef struct {
+    /* 字节 0: 0x1A表示文件结束 */
+    uint8_t eof_marker;
+} DBF_EOFMarker;
+
+// 日期类型转换辅助结构
+typedef struct {
+    uint8_t year;   // 年份-1900
+    uint8_t month;  // 1-12
+    uint8_t day;    // 1-31
+} DBF_Date;
+
+// 语言驱动程序ID枚举
+typedef enum {
+    DBF_LANG_NONE = 0,
+    DBF_LANG_US = 0x01,          // USA MS-DOS (OEM)
+    DBF_LANG_INTL = 0x02,        // International MS-DOS (OEM)
+    DBF_LANG_WIN = 0x03,         // Windows ANSI
+    DBF_LANG_MAC = 0x04,         // Macintosh
+    DBF_LANG_EEUROPE = 0x64,     // Eastern European MS-DOS (OEM)
+    DBF_LANG_RUSSIAN = 0x65,     // Russian MS-DOS (OEM)
+    DBF_LANG_NORDIC = 0x66,      // Nordic MS-DOS (OEM)
+    DBF_LANG_ICELAND = 0x67,     // Icelandic MS-DOS (OEM)
+    DBF_LANG_CZECH = 0x68,       // Czech MS-DOS (OEM)
+    DBF_LANG_POLISH = 0x69,      // Polish MS-DOS (OEM)
+    DBF_LANG_GREEK = 0x6A,       // Greek MS-DOS (OEM)
+    DBF_LANG_TURKISH = 0x6B,     // Turkish MS-DOS (OEM)
+    DBF_LANG_CYRILLIC = 0x6C,    // Russian Windows (ANSI)
+    DBF_LANG_EEUROPE_WIN = 0x6D, // Eastern European Windows (ANSI)
+    DBF_LANG_GREEK_WIN = 0x6E,   // Greek Windows (ANSI)
+    DBF_LANG_CHINESE_GB = 0x78,  // Simplified Chinese Windows (ANSI)
+    DBF_LANG_KOREAN = 0x79,      // Korean Windows (ANSI)
+    DBF_LANG_JAPANESE = 0x7A,    // Japanese Windows (ANSI)
+    DBF_LANG_CHINESE_BIG5 = 0x7B,// Traditional Chinese Windows (ANSI)
+    DBF_LANG_THAI = 0x7C,        // Thai Windows (ANSI)
+    DBF_LANG_HEBREW = 0x7D,      // Hebrew Windows (ANSI)
+    DBF_LANG_ARABIC = 0x7E,      // Arabic Windows (ANSI)
+} DBF_LanguageDriver;
+
+// 字段类型枚举
+typedef enum {
+    DBF_FIELD_CHAR = 'C',     // 字符型
+    DBF_FIELD_NUMERIC = 'N',  // 数值型
+    DBF_FIELD_FLOAT = 'F',    // 浮点型
+    DBF_FIELD_DATE = 'D',     // 日期型 (YYYYMMDD)
+    DBF_FIELD_LOGICAL = 'L',  // 逻辑型 (T/F/Y/N)
+    DBF_FIELD_MEMO = 'M',     // 备注型
+    DBF_FIELD_BINARY = 'B',   // 二进制型
+    DBF_FIELD_GENERAL = 'G',  // 通用型(OLE对象)
+    DBF_FIELD_PICTURE = 'P',  // 图片型
+    DBF_FIELD_CURRENCY = 'Y', // 货币型
+    DBF_FIELD_DATETIME = 'T', // 日期时间型
+    DBF_FIELD_INTEGER = 'I',  // 整型
+    DBF_FIELD_VARCHAR = 'V',  // 变长字符型
+    DBF_FIELD_TIMESTAMP = '@',// 时间戳
+    DBF_FIELD_DOUBLE = 'O',   // 双精度浮点
+    DBF_FIELD_AUTOINC = '+',  // 自增型
+} DBF_FieldType;
+
+#pragma pack(pop) // 恢复默认对齐方式
+
+// ==================== 辅助函数实现 ====================
 
 /**
- * @brief Structure representing a field subrecord in the DBF header.
- *
- * Field subrecords start at byte 32 of the header and define each field in the table.
- * There is one subrecord per field, each 32 bytes long, continuing until the header
- * terminator (0x0D). The number of fields can be determined by reading until the terminator.
+ * 解析DBF日期(YYMMDD)为time_t
+ * @param date DBF格式的3字节日期数据
+ * @return 对应的time_t值
  */
-#pragma pack(push, 1)
-typedef struct {
-    char field_name[11];     // Bytes 0-10: Field name, up to 10 chars, padded with nulls (0x00)
-    char field_type;         // Byte 11: Field type (e.g., 'C' for Character, 'N' for Numeric)
-    uint32_t displacement;   // Bytes 12-15: Displacement of field in record (little-endian)
-    uint8_t field_length;    // Byte 16: Length of the field in bytes
-    uint8_t decimal_places;  // Byte 17: Number of decimal places (for numeric fields)
-    uint8_t field_flags;    // Byte 18: Field flags (bitwise: 0x01 = system, 0x02 = nullable, 0x04 =
-                            // binary)
-    uint32_t autoinc_next;  // Bytes 19-22: Next autoincrement value (little-endian)
-    uint8_t autoinc_step;   // Byte 23: Autoincrement step value
-    uint8_t reserved[8];    // Bytes 24-31: Reserved bytes
-} DBFField;
-#pragma pack(pop)
+static inline time_t dbf_parse_date(const uint8_t date[3]) {
+    struct tm tm = {0};
+    tm.tm_year = date[0] + 100; // DBF年份=实际-1900, tm_year=实际-1900
+    tm.tm_mon = date[1] - 1;     // 月份0-11
+    tm.tm_mday = date[2];
+    return mktime(&tm);
+}
 
-// **File Type Constants**
-#define DBF_FILE_TYPE_FOXBASE 0x02                 // FoxBASE
-#define DBF_FILE_TYPE_FOXBASE_PLUS_DBASE_III 0x03  // FoxBASE+/dBASE III Plus, no memo
-#define DBF_FILE_TYPE_VISUAL_FOXPRO 0x30           // Visual FoxPro
-#define DBF_FILE_TYPE_VISUAL_FOXPRO_AUTOINC 0x31   // Visual FoxPro with autoincrement
-#define DBF_FILE_TYPE_VISUAL_FOXPRO_VAR 0x32       // Visual FoxPro with Varchar/Varbinary
-#define DBF_FILE_TYPE_DBASE_IV_SQL 0x43            // dBASE IV SQL table, no memo
-#define DBF_FILE_TYPE_DBASE_IV_SQL_SYSTEM 0x63     // dBASE IV SQL system, no memo
-#define DBF_FILE_TYPE_FOXBASE_PLUS_MEMO 0x83       // FoxBASE+/dBASE III Plus with memo
-#define DBF_FILE_TYPE_DBASE_IV_MEMO 0x8B           // dBASE IV with memo
-#define DBF_FILE_TYPE_DBASE_IV_SQL_MEMO 0xCB       // dBASE IV SQL table with memo
-#define DBF_FILE_TYPE_FOXPRO_2X_MEMO 0xF5          // FoxPro 2.x (or earlier) with memo
-#define DBF_FILE_TYPE_HIPER_SIX_MEMO 0xE5          // HiPer-Six with SMT memo
-#define DBF_FILE_TYPE_FOXBASE_ALT 0xFB             // FoxBASE (alternative)
-
-// **Table Flags (bitwise)**
-#define DBF_TABLE_FLAG_HAS_CDX 0x01   // File has a structural .cdx
-#define DBF_TABLE_FLAG_HAS_MEMO 0x02  // File has a Memo field
-#define DBF_TABLE_FLAG_IS_DBC 0x04    // File is a database (.dbc)
-
-// **Field Type Constants**
-#define DBF_FIELD_TYPE_CHARACTER 'C'  // Character
-#define DBF_FIELD_TYPE_CURRENCY 'Y'   // Currency (Visual FoxPro)
-#define DBF_FIELD_TYPE_NUMERIC 'N'    // Numeric
-#define DBF_FIELD_TYPE_FLOAT 'F'      // Float
-#define DBF_FIELD_TYPE_DATE 'D'       // Date
-#define DBF_FIELD_TYPE_DATETIME 'T'   // DateTime (Visual FoxPro)
-#define DBF_FIELD_TYPE_DOUBLE 'B'     // Double (Visual FoxPro)
-#define DBF_FIELD_TYPE_INTEGER 'I'    // Integer (Visual FoxPro)
-#define DBF_FIELD_TYPE_LOGICAL 'L'    // Logical
-#define DBF_FIELD_TYPE_MEMO 'M'       // Memo
-#define DBF_FIELD_TYPE_GENERAL 'G'    // General
-#define DBF_FIELD_TYPE_PICTURE 'P'    // Picture
-#define DBF_FIELD_TYPE_VARCHAR 'V'    // Varchar (Visual FoxPro)
-#define DBF_FIELD_TYPE_AUTOINC '+'    // Autoincrement (dBase Level 7)
-#define DBF_FIELD_TYPE_DOUBLE_D7 'O'  // Double (dBase Level 7)
-#define DBF_FIELD_TYPE_TIMESTAMP '@'  // Timestamp (dBase Level 7)
-
-// **Field Flags (bitwise)**
-#define DBF_FIELD_FLAG_SYSTEM 0x01       // System column (not visible to user)
-#define DBF_FIELD_FLAG_CAN_NULL 0x02     // Column can store null values
-#define DBF_FIELD_FLAG_BINARY 0x04       // Binary column (for CHAR and MEMO)
-#define DBF_FIELD_FLAG_NULL_BINARY 0x06  // NULL and binary (0x02 + 0x04)
-#define DBF_FIELD_FLAG_AUTOINC 0x0C      // Column is autoincrementing
-
-// **Record Delete Flag Constants**
-#define DBF_RECORD_NOT_DELETED 0x20  // Space: Record is not deleted
-#define DBF_RECORD_DELETED 0x2A      // Asterisk: Record is deleted
-
-#define SIZE_OF_DB_FIELD 32  // sizeof(DB_FIELD)
-#define SIZE_OF_DB_HEAD 32   // sizeof(DB_HEADER)
-
-#define RECORD_TERMINATOR 0x0D
-#define SIZE_OF_RECORD_TERMINATOR 1
-
-#define SIZE_OF_DELETE_FLAG 1
-
-/* Memo File Structure (.FPT)
- * Memo files contain one header record and any number of block structures.
- * The header record contains a pointer to the next free block and the size
- * of the block in bytes. The size is determined by the SET BLOCKSIZE command
- * when the file is created. The header record starts at file position zero and
- * occupies 512 bytes. The SET BLOCKSIZE TO 0 command sets the block size width to 1.
+/**
+ * 格式化time_t为DBF日期(YYMMDD)
+ * @param time 时间值
+ * @param out_date 输出的3字节DBF日期
  */
-/* Following the header record are the blocks that contain a block header and
- * the text of the memo. The table file contains block numbers that are used to
- * reference the memo blocks. The position of the block in the memo file is
- * determined by multiplying the block number by the block size (found in the
- * memo file header record). All memo blocks start at even block boundary
- * addresses. A memo block can occupy more than one consecutive block.
+static inline void dbf_format_date(time_t time, uint8_t out_date[3]) {
+    struct tm* tm = localtime(&time);
+    out_date[0] = tm->tm_year % 100; // 取后两位年份
+    out_date[1] = tm->tm_mon + 1;
+    out_date[2] = tm->tm_mday;
+}
+
+/**
+ * 字段类型转可读字符串
+ * @param type 字段类型字符
+ * @return 类型描述字符串
  */
+static inline const char* dbf_field_type_to_str(uint8_t type) {
+    switch(type) {
+        case DBF_FIELD_CHAR: return "Character";
+        case DBF_FIELD_NUMERIC: return "Numeric";
+        case DBF_FIELD_FLOAT: return "Float";
+        case DBF_FIELD_DATE: return "Date";
+        case DBF_FIELD_LOGICAL: return "Logical";
+        case DBF_FIELD_MEMO: return "Memo";
+        case DBF_FIELD_BINARY: return "Binary";
+        case DBF_FIELD_GENERAL: return "General(OLE)";
+        case DBF_FIELD_PICTURE: return "Picture";
+        case DBF_FIELD_CURRENCY: return "Currency";
+        case DBF_FIELD_DATETIME: return "DateTime";
+        case DBF_FIELD_INTEGER: return "Integer";
+        case DBF_FIELD_VARCHAR: return "VarChar";
+        case DBF_FIELD_TIMESTAMP: return "Timestamp";
+        case DBF_FIELD_DOUBLE: return "Double";
+        case DBF_FIELD_AUTOINC: return "AutoIncrement";
+        default: return "Unknown";
+    }
+}
 
-#pragma pack(push, 1)
-/* Memo Header Record */
-struct DB_MEMO_HEADER {
-    /* 00  03	Location of next free block [1] */
-    unsigned int block_adress;
-    /* 04  05	Unused */
-    unsigned char reserved[2];
-    /* 06  07	Block size (bytes per block) [1] */
-    unsigned short block_size;
-    /* 08  511	Unused */
-    unsigned char reserved2[504];
-};
-
-/* [1] Integers stored with the most significant byte first. See: endian.h   */
-
-/* Memo Block Header and Memo Text */
-struct DB_MEMO_BLOCK_TOP {
-    /* 00  03			Block signature [1]  */
-    /*	(indicates the type of data in the block)
-     *	0  picture (picture field type)
-     *	1  text (memo field type) */
-    unsigned int signature;
-    /* 04  07	Length [1] of memo (in bytes) */
-    unsigned int block_length;
-    /* 08 -  n	Memo text (n = length) */
-};
-
-/* [1] Integers stored with the most
-significant byte first.    */
-
-#pragma pack(pop)
-
-// u_int16_t rotate2b(u_int16_t var);
-
-// u_int32_t rotate4b(u_int32_t var);
-
-#endif  // DBF_STRUCT_H
+#endif // DBF_DEF_H

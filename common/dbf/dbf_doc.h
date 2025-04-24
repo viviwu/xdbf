@@ -5,7 +5,7 @@
 #ifndef DBF_DOC_H
 #define DBF_DOC_H
 
-#include "dbf_struct.h"
+#include "dbf_def.h"
 #include <string>
 #include <vector>
 #include <fstream>
@@ -28,7 +28,7 @@ public:
     uint32_t getRecordCount() const { return header_.num_records; }
 
     // Get field definitions
-    const std::vector<DBFField>& getFields() const { return fields_; }
+    const std::vector<DB_FIELD>& getFields() const { return fields_; }
 
     // Read a specific record (returns empty vector if index is invalid)
     std::vector<std::string> readRecord(uint32_t index) const;
@@ -43,14 +43,14 @@ public:
     bool deleteRecord(uint32_t index);
 
     // Create a new DBF file with given fields (overwrites if file exists)
-    bool create(const std::string& filename, const std::vector<DBFField>& fields);
+    bool create(const std::string& filename, const std::vector<DB_FIELD>& fields);
 
     void debugPrint() const; // New: For debugging
 
 private:
     std::string filename_;              // Current file path
-    DBFHeader header_;                  // File header
-    std::vector<DBFField> fields_;      // Field definitions
+    DB_HEADER header_;                  // File header
+    std::vector<DB_FIELD> fields_;      // Field definitions
     std::vector<char> data_;            // Raw data records
     bool isModified_;                   // Track if changes need saving
 

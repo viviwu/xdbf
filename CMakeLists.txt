@@ -11,16 +11,27 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin")
 SET(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/lib")
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/lib")
 
+# Include directories
 include_directories(
-        ./../common/dbf
-        ./atgo
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        common/utils
+        common/3rd/libdbf
 )
 
-add_executable(atgo_dbf
-        main.cpp
-        ../common/dbf/def_doc.cpp
-        ./atgo/atgo_dbf_doc.cpp
+add_executable(atgo_dbf_doc
+        dbf_doc_teser.cpp
+        common/utils/tool.cpp
+        common/dbf/dbf_doc.cpp
+        atgo/atgo_dbf_doc.cpp
         )
 
-# Include directories
-target_include_directories(atgo_dbf PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+add_executable(atgo_dbf
+        libdbf_tester.cpp
+        common/3rd/libdbf/src/dbf.h
+        common/3rd/libdbf/src/dbf.c
+        common/3rd/libdbf/src/dbf_endian.h
+        common/3rd/libdbf/src/dbf_endian.c
+)
+
+
+
