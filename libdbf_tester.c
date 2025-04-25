@@ -6,8 +6,10 @@
 #include <stdio.h>
 
 int main() {
+
     char file[] = "OrderAlgo_20250424.dbf";
     P_DBF* p_dbf = dbf_Open(file, true);
+    printf("version of dbf:%s\n", dbf_GetStringVersion(p_dbf));
     printf("formatted date:%s\n", dbf_GetDate(p_dbf));
     printf("Number of rows:%d\n", dbf_NumRows(p_dbf));
     printf("Number of columns:%d\n", dbf_NumCols(p_dbf));
@@ -15,10 +17,13 @@ int main() {
     printf("record length:%d\n", dbf_RecordLength(p_dbf));
 
     for (int column = 0; column < dbf_NumCols(p_dbf); ++column) {
-        printf("column:%d name: %s; type:%c; length:%d; decimals:%d \n", column,
+        printf("column:%d name: %s; type:%c; address:%d; length:%d; decimals:%d \n", column,
                dbf_ColumnName(p_dbf, column), dbf_ColumnType(p_dbf, column),
-               dbf_ColumnSize(p_dbf, column), dbf_ColumnDecimals(p_dbf, column));
+               dbf_ColumnAddress(p_dbf, column), dbf_ColumnSize(p_dbf, column),
+               dbf_ColumnDecimals(p_dbf, column));
     }
     dbf_Close(p_dbf);
+
+
     return 0;
 }

@@ -75,8 +75,8 @@ typedef struct {
     /* 字节 11: 字段类型 (参见DBF_FieldType枚举) */
     uint8_t field_type;
 
-    /* 字节 12-15: 字段数据地址(内存地址，文件中不使用，通常为0) */
-    uint32_t field_data_address;
+    /* 字节 12-15: Displacement of field in record */
+    uint32_t field_address;
 
     /* 字节 16: 字段长度 (最大254) */
     uint8_t field_length;

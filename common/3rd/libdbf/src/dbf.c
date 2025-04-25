@@ -69,13 +69,13 @@ static int dbf_ReadHeaderInfo(P_DBF *p_dbf)
 	if ((read( p_dbf->dbf_fh, header, sizeof(DB_HEADER))) == -1 ) {
 		return -1;
 	}
-
+    printf("header_length=%d; record_length=%d; records=%d \n", header->header_length, header->record_length, header->records);
 	/* Endian Swapping */
 	header->header_length = rotate2b(header->header_length);
 	header->record_length = rotate2b(header->record_length);
 	header->records = rotate4b(header->records);
 	p_dbf->header = header;
-
+    printf("header_length=%d; record_length=%d; records=%d \n", header->header_length, header->record_length, header->records);
 	return 0;
 }
 /* }}} */
@@ -136,7 +136,7 @@ static int dbf_ReadFieldInfo(P_DBF *p_dbf)
 	}
 
 	lseek(p_dbf->dbf_fh, sizeof(DB_HEADER), SEEK_SET);
-
+    printf("sizeof(DB_FIELD) = %d\n", sizeof(struct _DB_FIELD));
 	if ((read( p_dbf->dbf_fh, fields, columns * sizeof(DB_FIELD))) == -1 ) {
 		perror(_("In function dbf_ReadFieldInfo(): "));
 		return -1;
@@ -436,7 +436,7 @@ const char *dbf_GetDate(P_DBF *p_dbf)
 
 	if ( p_dbf->header->last_update[0] ) {
 		sprintf(date, "%d-%02d-%02d",
-		1900 + p_dbf->header->last_update[0],
+        1900 + p_dbf->header->last_update[0],
 		p_dbf->header->last_update[1],
 		p_dbf->header->last_update[2] );
 
