@@ -45,8 +45,8 @@
 */
 
 #ifdef __unix__
-#include <sys/types.h>
 #include <sys/stat.h>
+#include <sys/types.h>
 #include <unistd.h>
 #ifndef __ANUBISNET_TYPES__
 #define __ANUBISNET_TYPES__
@@ -70,8 +70,8 @@ typedef unsigned short u_int16_t;
 #include <sys\stat.h>
 #else
 #include <sys/stat.h>
-#include <unistd.h>
 #include <sys/types.h>
+#include <unistd.h>
 #endif
 
 #include <stdbool.h>
@@ -139,7 +139,7 @@ int dbf_GetVersion(P_DBF *p_dbf);
 	internally.
 	\return NULL in case of an error.
 */
-P_DBF *dbf_Open (const char *file, bool read_only);
+P_DBF *dbf_Open(const char *file, bool read_only);
 
 
 /*! \fn P_DBF *dbf_CreateFH (int fh, DB_FIELD *fields, int numfields)
@@ -151,7 +151,7 @@ P_DBF *dbf_Open (const char *file, bool read_only);
 	Creates a dBASE file and returns the object handle.
 	\return NULL in case of an error.
 */
-P_DBF *dbf_CreateFH (int fh, DB_FIELD *fields, int numfields);
+P_DBF *dbf_CreateFH(int fh, DB_FIELD *fields, int numfields);
 
 /*! \fn P_DBF *dbf_Create (const char *file, DB_FIELD *fields, int numfields)
 	\brief dbf_Create opens a new dBASE \a file and returns the object handle
@@ -162,7 +162,7 @@ P_DBF *dbf_CreateFH (int fh, DB_FIELD *fields, int numfields);
 	Creates a dBASE file and returns the object handle.
 	\return NULL in case of an error.
 */
-P_DBF *dbf_Create (const char *file, DB_FIELD *fields, int numfields);
+P_DBF *dbf_Create(const char *file, DB_FIELD *fields, int numfields);
 
 /*! \fn int dbf_Close (P_DBF *p_dbf)
 	\brief dbf_Close closes a dBASE file.
@@ -171,7 +171,7 @@ P_DBF *dbf_Create (const char *file, DB_FIELD *fields, int numfields);
 	Closes a dBASE file and frees all memory.
 	\return 0 if closing was successful and -1 if not.
 */
-int dbf_Close (P_DBF *p_dbf);
+int dbf_Close(P_DBF *p_dbf);
 
 // Functions to info about rows and columns
 /*! \fn int dbf_NumRows (P_DBF *p_dbf)
@@ -181,7 +181,7 @@ int dbf_Close (P_DBF *p_dbf);
 	Returns the number of datasets/rows.
 	\return Number of rows or -1 in case of an error.
 */
-int dbf_NumRows (P_DBF *p_dbf);
+int dbf_NumRows(P_DBF *p_dbf);
 
 /*! \fn int dbf_NumCols (P_DBF *p_dbf)
 	\brief dbf_NumCols returns the number of attributes/columns
@@ -190,7 +190,7 @@ int dbf_NumRows (P_DBF *p_dbf);
 	Returns the number of fields/columns.
 	\return Number of columns or -1 in case of an error.
 */
-int dbf_NumCols (P_DBF *p_dbf);
+int dbf_NumCols(P_DBF *p_dbf);
 
 /*! \fn const char *dbf_ColumnName(P_DBF *p_dbf, int column)
 	\brief dbf_ColumnName returns the name of a selected \a column
@@ -363,4 +363,3 @@ int dbf_WriteRecord(P_DBF *p_dbf, char *record, int len);
 int dbf_WriteRecordWithFlag(P_DBF *p_dbf, char *record, int len);
 
 int dbf_IsMemo(P_DBF *p_dbf);
-

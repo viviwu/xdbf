@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.17)
-project(atgo_dbf)
+project(atgo_dbf C)
 
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_CXX_STANDARD 11)
@@ -11,21 +11,18 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin")
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/lib")
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/lib")
 
-# Include directories
-include_directories(
-#        ${CMAKE_CURRENT_SOURCE_DIR}
-#        common/utils
-        common/3rd/libdbf/include
-)
+#set(LIBRARY_OUTPUT_PATH     ${CMAKE_CURRENT_SOURCE_DIR}/lib)
+#set(EXECUTABLE_OUTPUT_PATH  ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 
-add_executable(libdbf_tester
-        libdbf_tester.c
-        common/3rd/libdbf/include/libdbf/libdbf.h
-        common/3rd/libdbf/src/dbf.h
-        common/3rd/libdbf/src/dbf.c
-        common/3rd/libdbf/src/dbf_endian.h
-        common/3rd/libdbf/src/dbf_endian.c
-        )
+include_directories(common/3rd/libdbf/include .)
+
+# aux_source_directory(common/3rd/libdbf/src LIB_DBF_SRC) # collect *.c/cpp, but *.h files will be ignored!!!
+FILE(GLOB_RECURSE LIB_DBF_SRC common/3rd/libdbf/src/*.h common/3rd/libdbf/src/*.c)
+message("LIB_DBF_SRC: ${LIB_DBF_SRC}")
+add_library(libdbf ${LIB_DBF_SRC})
+
+add_executable(libdbf_tester libdbf_tester.c atgo/atgo_struct.h)
+target_link_libraries(libdbf_tester libdbf)
 
 
 #add_executable(dbf_doc_teser

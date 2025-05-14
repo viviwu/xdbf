@@ -135,7 +135,7 @@ struct _DB_FIELD {
 	/*! Byte: 31; Production MDX field flag */
 	unsigned char mdx;
 };
-
+typedef struct _DB_FIELD DB_FIELD;
 /*! \struct P_DBF
 	\brief P_DBF is a global file handler
 
