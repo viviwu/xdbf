@@ -2,6 +2,7 @@
 // Created by wuxw on 2025/5/15/015.
 //
 
+#include <stdio.h>
 #include <assert.h>
 #include <atgo/atgo_struct.h>
 #include <libdbf/libdbf.h>
@@ -9,6 +10,11 @@
 
 int main()
 {
+  char date[9];
+  get_today_date(date, sizeof(date));
+  printf("today:%s \n", date);
+  return 0;
+
   char filename[24] = {0};
   generate_order_algo_filename(filename, sizeof(filename));
   printf("filename: %s\n", filename);

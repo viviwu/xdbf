@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.17)
-project(atgo_dbf C CXX)
+project(atgo_dbf CXX)
 
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 11)
