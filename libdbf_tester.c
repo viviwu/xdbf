@@ -2,84 +2,20 @@
 // Created by wuxw on 2025/4/24/024.
 //
 
-
-#include <libdbf/libdbf.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/timeb.h>  // 用于ftime函数
-#include <time.h>
+#include <assert.h>
 #include <atgo/atgo_struct.h>
-// 获取今日日期字符串 YYYYMMDD
-void get_today_date(char* buffer, size_t size)
-{
-  if (!buffer || size < 9)
-    return;
-  time_t     rawtime;
-  struct tm* timeinfo;
-  time(&rawtime);
-  timeinfo = localtime(&rawtime);
-  strftime(buffer, size, "%Y%m%d", timeinfo);
-}
+#include <libdbf/libdbf.h>
 
-// 生成OrderAlgo_YYYYMMDD.dbf格式的文件名
-void generate_order_algo_filename(char* buffer, size_t size)
-{
-  if (!buffer || size < 24)
-    return;
-  char date[9];
-  get_today_date(date, sizeof(date));
-  sprintf(buffer, "OrderAlgo_%s.dbf", date);
-}
-
-// 生成YYYYMMDDsshhmmSSS格式的固定时间字符串
-void generate_fixed_time_string(char* buffer, size_t size, const char* fixed_part)
-{
-  if (!buffer || size < 18)
-    return;
-  char date[9];
-  get_today_date(date, sizeof(date));
-  sprintf(buffer, "%s%s", date, fixed_part);
-}
-
-// 生成当前时间戳（精确到秒）YYYYMMDDHHMMSS
-void generate_current_timestamp_second(char* buffer, size_t size)
-{
-  if (!buffer || size < 15)
-    return;
-  time_t     now;
-  struct tm* tm_info;
-
-  time(&now);
-  tm_info = localtime(&now);
-
-  sprintf(buffer, "%04d%02d%02d%02d%02d%02d", tm_info->tm_year + 1900, tm_info->tm_mon + 1, tm_info->tm_mday,
-          tm_info->tm_hour, tm_info->tm_min, tm_info->tm_sec);
-}
-
-// 生成当前时间戳（精确到毫秒）YYYYMMDDHHMMSSsss
-void generate_current_timestamp_millisecond(char* buffer, size_t size)
-{
-  if (!buffer || size < 18)
-    return;
-  struct timeb tb;
-  struct tm*   tm_info;
-  time_t       now;
-
-  time(&now);
-  tm_info = localtime(&now);
-  ftime(&tb);
-
-  sprintf(buffer, "%04d%02d%02d%02d%02d%02d%03d", tm_info->tm_year + 1900, tm_info->tm_mon + 1, tm_info->tm_mday,
-          tm_info->tm_hour, tm_info->tm_min, tm_info->tm_sec, tb.millitm);
-
-  // 计算毫秒（注意：这种方法依赖于CLOCKS_PER_SEC，可能不是很精确）
-  //  unsigned int milliseconds;
-  //  clock_now = clock();
-  //  milliseconds = (clock_now % CLOCKS_PER_SEC) * 1000 / CLOCKS_PER_SEC;
-}
+#include "utils.h"
 
 int main()
 {
+  char account_no[] = "10001253";
+  char symbol[] = "300676.SZ";
+  char side[] = "1";
+  char order_qty[] = "200";
+  char ord_type[] = "201";
+  char algo_param[] = "PriceTypeI=0:priceF=55.95";
   char filename[24] = {0};
   char eff_time[18] = {0};  //YYYYMMDDHHMMSSsss
   char exp_time[18] = {0};  //YYYYMMDDHHMMSSsss
@@ -98,7 +34,11 @@ int main()
   printf("timestamp_sec: %s\n", timestamp_sec);
   printf("cur_timestamp: %s\n", cur_timestamp);
 
-  P_DBF* p_dbf = dbf_Open(filename, false);
+  char dbf_file_path[256];
+  sprintf(dbf_file_path, "D:\\Program Files\\SJZQ-FZHJ\\OrderScan\\%s", filename);
+  printf("dbf_file_path:%s \n", dbf_file_path);
+
+  P_DBF* p_dbf = dbf_Open(dbf_file_path, false);
   int    rec_len = dbf_RecordLength(p_dbf);
   int    num_cols = dbf_NumCols(p_dbf);
   int    num_rows = dbf_NumRows(p_dbf);
@@ -127,7 +67,7 @@ int main()
       const char* name = dbf_ColumnName(p_dbf, column);
       char        col_type = dbf_ColumnType(p_dbf, column);
       int         field_size = dbf_ColumnSize(p_dbf, column);
-      char*       val = malloc(field_size);
+      char*       val = (char*) malloc(field_size);
       memset(val, 0x20, field_size);
       dbf_GetRecordValue(p_dbf, buffer, column, val);
       if ('N' == col_type)
@@ -142,68 +82,79 @@ int main()
     }
   }
 
-  char *record; // char record[636];
-#if 0
-  //source data:
-  char* order_data[] = {cur_timestamp, "10001253", "605009.SH", "1", "100", "201", eff_time, exp_time, "1", "1", ""};
-//  printf("order_data:%s\n", order_data[0]);
-
-  // receive buffer:
-  record = (char*) malloc(rec_len);
-  if (record == NULL)
+  // write record:
+  if (sizeof(OrderAlgo) != rec_len - 1)
   {
+    fprintf(stderr, "sizeof(OrderAlgo) %zd != rec_len(%d)\n", sizeof(OrderAlgo), rec_len);
+    return -1;
+  }
+  char* record;  // char[636];
+  if (NULL == (record = (char*) malloc(rec_len)))
+  {
+    fprintf(stderr, "OrderAlgo* order malloc failed!\n");
     dbf_Close(p_dbf);
     return -1;
   }
+  memset(record, 0x20, rec_len);  //0x20 0x2A
 
-  memset(record, 0x2A, rec_len); // *
-  memset(record, 0x20, 1); // space
+#if 0
+  //source data:
+  char* order_data[] = {cur_timestamp, account_no, symbol, side, order_qty, ord_type,
+                        eff_time,      exp_time,   "1",    "1",  algo_param};
+
   // fill data to buffer
-  for (int column = 0; column < num_cols; ++column)
+  for (int col = 0; col < num_cols; ++col)
   {
-    char* str = order_data[column];
-    int   len = dbf_ColumnSize(p_dbf, column);
+    char* str = order_data[col];
+    int   len = dbf_ColumnSize(p_dbf, col);
     if (len > 0)
     {
-      int str_len = strlen(str);  // 此处需要去掉c字符串的\0结尾符
+      int str_len = strlen(str);  // cstring need trim '\0'
       if (str_len > len)
         str_len = len;
-      memcpy(record + dbf_ColumnAddress(p_dbf, column), str, str_len);
-      printf("ColumnName=%s, Field(%d,%d), Value=%s, str_len=%d\n", dbf_ColumnName(p_dbf, column),
-             dbf_ColumnAddress(p_dbf, column), dbf_ColumnSize(p_dbf, column), str, str_len);
+      memcpy(record + dbf_ColumnAddress(p_dbf, col), str, str_len);
+      printf("ColumnName=%s, Field(%d,%d), Value=%s, str_len=%d\n", dbf_ColumnName(p_dbf, col),
+             dbf_ColumnAddress(p_dbf, col), dbf_ColumnSize(p_dbf, col), str, str_len);
     }
   }
-#endif
-
-  OrderAlgo *order= malloc(sizeof(OrderAlgo));
-  memset(order, 0x20, sizeof(OrderAlgo));
-  strncpy(order->ExternalId, cur_timestamp, sizeof(cur_timestamp));
-  strncpy(order->ClientName, "10001253", 8);
-  strncpy(order->Symbol, "605009.SH", 9);
-  strncpy(order->Side, "1", 1);
-  strncpy(order->OrderQty, "100", 3);
-  strncpy(order->OrdType, "201", 3);
-  strncpy(order->EffTime, eff_time,  sizeof(order->EffTime));
-  strncpy(order->ExpTime, exp_time, sizeof(order->ExpTime));
-  order->LimAction='1';
-  order->AftAction='1';
-  strncpy(order->AlgoParam, "", 0);
-
-  record = order;
-  printf("order record:%s \n", record);
-
-//  int ret = dbf_WriteRecordWithFlag(p_dbf, record, rec_len);
-    int ret =dbf_WriteRecord(p_dbf, record, sizeof(OrderAlgo));
-  if (0 == ret)
+  printf("%s \n", record);
+  int ret = dbf_WriteRecordWithFlag(p_dbf, record, rec_len);
+  if (ret > 0)
   {
-    printf("dbf_WriteRecord succeed with no memo!");
-  }
-  else if (1 == ret)
-  {
-    printf("dbf_WriteRecord succeed with memo!");
+    printf("dbf_WriteRecord succeed!");
   }
   else
+  {
     printf("dbf_WriteRecord on error!!");
+  }
+#else
+  OrderAlgo *order = malloc(sizeof(OrderAlgo));
+  memset(order, 0x20, sizeof(OrderAlgo));
+  strncpy(order->ExternalId, cur_timestamp, strlen(cur_timestamp));
+  strncpy(order->ClientName, account_no, strlen(account_no));
+  strncpy(order->Symbol, symbol, strlen(symbol));
+  strncpy(order->Side, side, strlen(side));
+  strncpy(order->OrderQty, order_qty, strlen(order_qty));
+  strncpy(order->OrdType, ord_type, strlen(ord_type));
+  strncpy(order->EffTime, eff_time, strlen(eff_time));
+  strncpy(order->ExpTime, exp_time, strlen(exp_time));
+  order->LimAction = '1';
+  order->AftAction = '1';
+  strncpy(order->AlgoParam, algo_param, strlen(algo_param));
+
+//  int ret = dbf_WriteRecord(p_dbf, order, sizeof(OrderAlgo));
+  memcpy(record+1, order, sizeof(OrderAlgo));
+  int ret = dbf_WriteRecordWithFlag(p_dbf, record, rec_len);
+  if (ret > 0)
+  {
+    printf("dbf_WriteRecord succeed!");
+  }
+  else
+  {
+    printf("dbf_WriteRecord on error!!");
+  }
+
+#endif
 
   dbf_Close(p_dbf);
 

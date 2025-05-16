@@ -13,8 +13,6 @@
 #ifndef LIBDBF_ATGO_DEF_H
 #define LIBDBF_ATGO_DEF_H
 
-typedef unsigned char uint8_t;
-
 #pragma pack(push, 1) /* 确保1字节对齐 */
 
 /* 母单委托文件结构 */
@@ -36,62 +34,62 @@ typedef struct
 /* 撤单委托文件结构 */
 typedef struct
 {
-  char    QuoteId[20]; /* 母单委托编号 (Y) */
-  int32_t CxlType;     /* 撤单类型 (见CxlType枚举) (Y) */
+  char QuoteId[20]; /* 母单委托编号 (Y) */
+  char CxlType[3];  /* 撤单类型 (见CxlType枚举) (Y) */
 } CancelOrderAlgo;
 
 /* 母单委托回报结构 */
 typedef struct
 {
-  char    ExternalId[30];  /* 自定义委托编号 */
-  char    QuoteId[20];     /* 系统委托编号 */
-  char    ClientName[255]; /* 账户名称 */
-  char    Symbol[40];      /* 证券代码 */
-  int32_t SecType;         /* 证券类型 (见SecurityType枚举) */
-  int32_t SecExch;         /* 交易所类型 (见ExchangeType枚举) */
-  int32_t Side;            /* 买卖方向 */
-  char    TransTime[17];   /* 委托时间 */
-  int32_t OrderQty;        /* 委托数量 */
-  int32_t OrdType;         /* 算法类型 */
-  double  Price;           /* 价格 (精度3) */
-  char    EffTime[17];     /* 开始时间 */
-  char    ExpTime[17];     /* 结束时间 */
-  int8_t  LimAction;       /* 涨跌停处理 */
-  int8_t  AftAction;       /* 过期处理 */
-  char    AlgoParam[255];  /* 策略参数 */
-  int32_t CumQty;          /* 累计成交数量 */
-  int32_t LeavesQty;       /* 剩余数量 */
-  int32_t OutstaQty;       /* 未成交数量 */
-  double  AvgPx;           /* 平均成交价 (精度3) */
-  int32_t OrdStatus;       /* 订单状态 */
-  int32_t CxlType;         /* 撤单类型 */
-  char    BasketId[255];   /* 篮子编号 */
-  char    Text[255];       /* 备注信息 */
-  char    UpdateTime[17];  /* 更新时间 */
+  char   ExternalId[30];  /* 自定义委托编号 */
+  char   QuoteId[20];     /* 系统委托编号 */
+  char   ClientName[255]; /* 账户名称 */
+  char   Symbol[40];      /* 证券代码 */
+  char   SecType[3];      /* 证券类型 (见SecurityType枚举) */
+  char   SecExch[3];      /* 交易所类型 (见ExchangeType枚举) */
+  char   Side[3];         /* 买卖方向 */
+  char   TransTime[17];   /* 委托时间 */
+  char   OrderQty[10];    /* 委托数量 */
+  char   OrdType[6];      /* 算法类型 */
+  char   Price[10];       /* 价格 (精度3) */
+  char   EffTime[17];     /* 开始时间 */
+  char   ExpTime[17];     /* 结束时间 */
+  int8_t LimAction;       /* 涨跌停处理 */
+  int8_t AftAction;       /* 过期处理 */
+  char   AlgoParam[255];  /* 策略参数 */
+  char   CumQty[10];      /* 累计成交数量 */
+  char   LeavesQty[10];   /* 剩余数量 */
+  char   OutstaQty[10];   /* 未成交数量 */
+  char   AvgPx[10];       /* 平均成交价 (精度3) */
+  char   OrdStatus[3];    /* 订单状态 */
+  char   CxlType[3];      /* 撤单类型 */
+  char   BasketId[255];   /* 篮子编号 */
+  char   Text[255];       /* 备注信息 */
+  char   UpdateTime[17];  /* 更新时间 */
 } ReportOrderAlgo;
 
 /* 子单委托回报结构 */
 typedef struct
 {
-  char    ExternalId[30];  /* 自定义委托编号 */
-  char    QuoteId[20];     /* 母单编号 */
-  char    ClOrdId[20];     /* 子单编号 */
-  char    OrderId[20];     /* 外部委托编号 */
-  char    ClientName[255]; /* 账户名称 */
-  char    TransTime[17];   /* 委托时间 */
-  int32_t OrdStatus;       /* 委托状态 */
-  char    Symbol[40];      /* 证券代码 */
-  int32_t Side;            /* 买卖方向 */
-  int32_t SecType;         /* 证券类型 */
-  int32_t SecExch;         /* 交易所类型 */
-  double  Price;           /* 委托价格 */
-  int32_t OrdType;         /* 算法类型 */
-  int32_t OrderQty;        /* 委托数量 */
-  int32_t CumQty;          /* 累计成交 */
-  int32_t LeavesQty;       /* 剩余数量 */
-  double  AvgPx;           /* 成交均价 */
-  char    UpdateTime[17];  /* 更新时间 */
-  char    Text[255];       /* 备注 */
+  char ExternalId[30];  /* 自定义委托编号 */
+  char QuoteId[20];     /* 母单编号 */
+  char ClOrdId[20];     /* 子单编号 */
+  char OrderId[20];     /* 外部委托编号 */
+  char ClientName[255]; /* 账户名称 */
+  char TransTime[17];   /* 委托时间 */
+  char OrdStatus[3];    /* 委托状态 */
+  char Symbol[40];      /* 证券代码 */
+  char Side[3];         /* 买卖方向 */
+  char SecType[3];      /* 证券类型 */
+  char SecExch[3];      /* 交易所类型 */
+  char Price[10];       /* 委托价格 */
+  char OrdType[6];      /* 算法类型 */
+  char OrderQty[10];    /* 委托数量 */
+  char CumQty[10];      /* 累计成交 */
+  char LeavesQty[10];   /* 剩余数量 */
+  char AvgPx[10];       /* 成交均价 */
+  char UpdateTime[17];  /* 更新时间 */
+  char Text[255];       /* 备注 */
 } SubOrderAlgo;
 
 //资金回报 dbf字段

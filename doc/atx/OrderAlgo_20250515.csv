@@ -1,0 +1,2 @@
+ClOrdID,ClientName,Symbol,Side,OrderQty,OrdType,EffectiveTime,ExpireTime,LimitAction,AfterAction,AlgoParam
+123,10001253,605009,1,100,201,20250515T093001,20250515T145659,PriceTypeI=0:priceF=58.35

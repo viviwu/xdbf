@@ -102,7 +102,7 @@ static int dbf_WriteHeaderInfo(P_DBF *p_dbf, DB_HEADER *header)
   memcpy(newheader, header, sizeof(DB_HEADER));
 
   ps_calendar_time = time(NULL);
-  if (ps_calendar_time != (time_t) (-1))
+  if (ps_calendar_time != (time_t)(-1))
   {
     ps_local_tm = localtime(&ps_calendar_time);
     newheader->last_update[0] = ps_local_tm->tm_year;
@@ -244,7 +244,7 @@ P_DBF *dbf_Open(const char *file, bool read_only)
  */
 P_DBF *dbf_CreateFH(int fh, DB_FIELD *fields, int numfields)
 {
-  P_DBF     *p_dbf;
+  P_DBF *    p_dbf;
   DB_HEADER *header;
   int        reclen, i;
 
@@ -605,11 +605,12 @@ int dbf_SetRecordOffset(P_DBF *p_dbf, int offset)
  */
 int dbf_ReadRecord(P_DBF *p_dbf, char *record, int len)
 {
-  //	off_t offset;
+  off_t offset;
   if (p_dbf->cur_record >= p_dbf->header->records)
     return -1;
-  //	offset = lseek(p_dbf->dbf_fh, p_dbf->header->header_length + p_dbf->cur_record * (p_dbf->header->record_length), SEEK_SET);
-  //	fprintf(stdout, "Offset = %d, Record length = %d\n", offset, p_dbf->header->record_length);
+  offset =
+    lseek(p_dbf->dbf_fh, p_dbf->header->header_length + p_dbf->cur_record * (p_dbf->header->record_length), SEEK_SET);
+  fprintf(stdout, "Offset = %d, Record length = %d\n", offset, p_dbf->header->record_length);
   if (read(p_dbf->dbf_fh, record, p_dbf->header->record_length) == -1)
   {
     return -1;
@@ -630,18 +631,51 @@ int dbf_WriteRecord(P_DBF *p_dbf, char *record, int len)
     fprintf(stderr, "\n");
     return -1;
   }
+  /**
   lseek(p_dbf->dbf_fh, 0, SEEK_END);
-  if (write(p_dbf->dbf_fh, " ", 1) == -1)
-  {
+  if (write(p_dbf->dbf_fh, " ", 1) == -1) 
+  {printf("write delete flag error \n");
     return -1;
-  }
+  } 
+
   if (write(p_dbf->dbf_fh, record, p_dbf->header->record_length - 1) == -1)
+  {printf("write record error \n");
+    return -1;
+  }
+  */
+  // Calculate the exact location of the new record
+  off_t offset = p_dbf->header->header_length + p_dbf->header->records * p_dbf->header->record_length;
+
+  if (lseek(p_dbf->dbf_fh, offset, SEEK_SET) == -1)
+  {
+    printf("seek to record position error\n");
+    return -1;
+  }
+
+  // Prepare a complete record with deletion flags
+  char *full_record = malloc(p_dbf->header->record_length);
+  if (NULL != full_record)
   {
     return -1;
   }
+
+  full_record[0] = ' ';  // deletion flag  byte:0x20/0x2A
+  memcpy(full_record + 1, record, len);
+
+  // Write a complete record at once
+  if (write(p_dbf->dbf_fh, full_record, p_dbf->header->record_length) == -1)
+  {
+    free(full_record);
+    printf("write record error\n");
+    return -1;
+  }
+
+  free(full_record);
+
   p_dbf->header->records++;
   if (0 > dbf_WriteHeaderInfo(p_dbf, p_dbf->header))
   {
+    printf("write header error \n");
     return -1;
   }
   return p_dbf->header->records;
@@ -649,26 +683,47 @@ int dbf_WriteRecord(P_DBF *p_dbf, char *record, int len)
 /* }}} */
 
 /*int dbf_WriteRecordWithFlag(){{{
- * */
-int dbf_WriteRecordWithFlag(P_DBF *p_dbf, char *record, int len){
+ * Write a complete record with deletion flag to DBF file
+ * @param p_dbf DBF file handle
+ * @param record Complete record data including deletion flag
+ * @param len Length of the complete record (should equal record_length)
+ * @return Number of records after write, -1 on error
+ */
+int dbf_WriteRecordWithFlag(P_DBF *p_dbf, char *record, int len)
+{
+  // Validate record length
   if (len != p_dbf->header->record_length)
   {
-    fprintf(stderr, _("Length of record mismatches expected length (%d != %d)."), len,
-            p_dbf->header->record_length);
+    fprintf(stderr, _("Length of record mismatches expected length (%d != %d)."), len, p_dbf->header->record_length);
     fprintf(stderr, "\n");
     return -1;
   }
-  lseek(p_dbf->dbf_fh, 0, SEEK_END);
 
-  if (write(p_dbf->dbf_fh, record, p_dbf->header->record_length) == -1)
-  {printf("write record error \n");
+  // Calculate exact position for the new record
+  off_t offset = p_dbf->header->header_length + p_dbf->header->records * p_dbf->header->record_length;
+
+  // Seek to the correct position
+  if (lseek(p_dbf->dbf_fh, offset, SEEK_SET) == -1)
+  {
+    printf("seek to record position error\n");
     return -1;
   }
+
+  // Write the complete record at once
+  if (write(p_dbf->dbf_fh, record, p_dbf->header->record_length) == -1)
+  {
+    printf("write record error\n");
+    return -1;
+  }
+
+  // Update record count in header
   p_dbf->header->records++;
   if (0 > dbf_WriteHeaderInfo(p_dbf, p_dbf->header))
-  {printf("write header error \n");
+  {
+    printf("write header error\n");
     return -1;
   }
+
   return p_dbf->header->records;
 }
 /*}}}*/
