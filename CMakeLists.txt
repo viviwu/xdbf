@@ -32,9 +32,9 @@ add_executable(libdbf_reader libdbf_reader.c common/utils/c_utils.h common/utils
 target_link_libraries(libdbf_reader libdbf)
 
 add_executable(dbf_doc_teser
-        common/dbf/dbf_def.h
-        common/dbf/dbf_doc.h
-        common/dbf/dbf_doc.cpp
+        common/dbf_doc/dbf_def.h
+        common/dbf_doc/dbf_doc.h
+        common/dbf_doc/dbf_doc.cpp
         common/utils/c_utils.h
         common/utils/c_utils.c
         atgo/atgo_struct.h
@@ -43,7 +43,7 @@ add_executable(dbf_doc_teser
         dbf_doc_teser.cpp
 )
 target_include_directories( dbf_doc_teser PRIVATE
-        common/dbf
+        common/dbf_doc
         .
 )
 
