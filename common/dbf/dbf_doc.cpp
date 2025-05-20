@@ -60,10 +60,11 @@ bool DbfDoc::open(const std::string& filename) {
     ifs.read(data_.data(), data_size);
     if (ifs.gcount() != static_cast<std::streamsize>(data_size)) return false;
 
-    debugPrint();
-
     filename_ = filename;
     isModified_ = false;
+
+    debugPrint();
+
     return true;
 }
 

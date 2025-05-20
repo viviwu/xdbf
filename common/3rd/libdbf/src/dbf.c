@@ -66,7 +66,7 @@ const char *get_db_version(int version)
  */
 static int dbf_ReadHeaderInfo(P_DBF *p_dbf)
 {
-  DB_HEADER *header;
+  DB_HEADER *header; printf("sizeof(DB_FIELD) = %zd \n", sizeof(DB_FIELD));
   if (NULL == (header = malloc(sizeof(DB_HEADER))))
   {
     return -1;
@@ -135,34 +135,26 @@ static int dbf_WriteHeaderInfo(P_DBF *p_dbf, DB_HEADER *header)
  */
 static int dbf_ReadFieldInfo(P_DBF *p_dbf)
 {
-  int       columns, i, offset;
-  DB_FIELD *fields;
+    int columns, i;
+    DB_FIELD *fields;
 
-  columns = dbf_NumCols(p_dbf);
+    columns = dbf_NumCols(p_dbf);
+    if (NULL == (fields = malloc(columns * sizeof(DB_FIELD))))
+    {
+        return -1;
+    }
 
-  if (NULL == (fields = malloc(columns * sizeof(DB_FIELD))))
-  {
-    return -1;
-  }
+    lseek(p_dbf->dbf_fh, sizeof(DB_HEADER), SEEK_SET);
+    if ((read(p_dbf->dbf_fh, fields, columns * sizeof(DB_FIELD))) == -1)
+    {
+        perror(_("In function dbf_ReadFieldInfo(): "));
+        return -1;
+    }
+    p_dbf->fields = fields;
+    p_dbf->columns = columns;
 
-  lseek(p_dbf->dbf_fh, sizeof(DB_HEADER), SEEK_SET);
-  printf("sizeof(DB_FIELD) = %zd\n", sizeof(struct _DB_FIELD));
-  if ((read(p_dbf->dbf_fh, fields, columns * sizeof(DB_FIELD))) == -1)
-  {
-    perror(_("In function dbf_ReadFieldInfo(): "));
-    return -1;
-  }
-  p_dbf->fields = fields;
-  p_dbf->columns = columns;
-  /* The first byte of a record indicates whether it is deleted or not. */
-  offset = 1;
-  for (i = 0; i < columns; i++)
-  {
-    fields[i].field_offset = offset;
-    offset += fields[i].field_length;
-  }
-
-  return 0;
+    // 不再需要计算field_offset
+    return 0;
 }
 /* }}} */
 
@@ -732,13 +724,16 @@ int dbf_WriteRecordWithFlag(P_DBF *p_dbf, char *record, int len)
  */
 char *dbf_GetRecordData(P_DBF *p_dbf, char *record, int column)
 {
-  return (record + p_dbf->fields[column].field_offset);
+    // 使用field_address替代field_offset
+    return (record + p_dbf->fields[column].field_address);
 }
 /* }}} */
 
 void dbf_GetRecordValue(P_DBF *p_dbf, char *record, int column, char *val)
 {
-  strncpy(val, record + p_dbf->fields[column].field_offset, dbf_ColumnSize(p_dbf, column));
+    // 使用field_address替代field_offset  
+    strncpy(val, record + p_dbf->fields[column].field_address, 
+            dbf_ColumnSize(p_dbf, column));
 }
 
 /*

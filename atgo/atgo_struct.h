@@ -13,106 +13,106 @@
 #ifndef LIBDBF_ATGO_DEF_H
 #define LIBDBF_ATGO_DEF_H
 
-#pragma pack(push, 1) /* ç¡®ä¿1å­—èŠ‚å¯¹é½ */
+#pragma pack(push, 1) /* È·±£1×Ö½Ú¶ÔÆë */
 
-/* æ¯å•å§”æ‰˜æ–‡ä»¶ç»“æ„ */
+/* Ä¸µ¥Î¯ÍĞÎÄ¼ş½á¹¹ */
 typedef struct
 {
-  char   ExternalId[30];  /* è‡ªå®šä¹‰å§”æ‰˜ç¼–å· (N) */
-  char   ClientName[255]; /* è´¦æˆ·åç§° (Y) */
-  char   Symbol[40];      /* è¯åˆ¸ä»£ç ï¼Œå¦‚000001 (Y) */
-  char   Side[3];         /* ä¹°å–æ–¹å‘ (è§Sideæšä¸¾) (Y) */
-  char   OrderQty[10];    /* å§”æ‰˜æ•°é‡ (Y) */
-  char   OrdType[6];      /* ç®—æ³•ç±»å‹ (è§OrdTypeæšä¸¾) (Y) */
-  char   EffTime[17];     /* å¼€å§‹æ—¶é—´ (YYYYMMDDHHMMSSmmm) (Y) */
-  char   ExpTime[17];     /* ç»“æŸæ—¶é—´ (æ ¼å¼åŒä¸Š) (Y) */
-  int8_t LimAction;       /* æ¶¨è·Œåœåæ˜¯å¦äº¤æ˜“ 0-å¦ 1-æ˜¯ (Y) */
-  int8_t AftAction;       /* è¿‡æœŸåæ˜¯å¦äº¤æ˜“ 0-å¦ 1-æ˜¯ (Y) */
-  char   AlgoParam[255];  /* ç­–ç•¥å‚æ•° (N) */
+  char   ExternalId[30];  /* ×Ô¶¨ÒåÎ¯ÍĞ±àºÅ (N) */
+  char   ClientName[255]; /* ÕË»§Ãû³Æ (Y) */
+  char   Symbol[40];      /* Ö¤È¯´úÂë£¬Èç000001 (Y) */
+  char   Side[3];         /* ÂòÂô·½Ïò (¼ûSideÃ¶¾Ù) (Y) */
+  char   OrderQty[10];    /* Î¯ÍĞÊıÁ¿ (Y) */
+  char   OrdType[6];      /* Ëã·¨ÀàĞÍ (¼ûOrdTypeÃ¶¾Ù) (Y) */
+  char   EffTime[17];     /* ¿ªÊ¼Ê±¼ä (YYYYMMDDHHMMSSmmm) (Y) */
+  char   ExpTime[17];     /* ½áÊøÊ±¼ä (¸ñÊ½Í¬ÉÏ) (Y) */
+  int8_t LimAction;       /* ÕÇµøÍ£ºóÊÇ·ñ½»Ò× 0-·ñ 1-ÊÇ (Y) */
+  int8_t AftAction;       /* ¹ıÆÚºóÊÇ·ñ½»Ò× 0-·ñ 1-ÊÇ (Y) */
+  char   AlgoParam[255];  /* ²ßÂÔ²ÎÊı (N) */
 } OrderAlgo;
 
-/* æ’¤å•å§”æ‰˜æ–‡ä»¶ç»“æ„ */
+/* ³·µ¥Î¯ÍĞÎÄ¼ş½á¹¹ */
 typedef struct
 {
-  char QuoteId[20]; /* æ¯å•å§”æ‰˜ç¼–å· (Y) */
-  char CxlType[3];  /* æ’¤å•ç±»å‹ (è§CxlTypeæšä¸¾) (Y) */
+  char QuoteId[20]; /* Ä¸µ¥Î¯ÍĞ±àºÅ (Y) */
+  char CxlType[3];  /* ³·µ¥ÀàĞÍ (¼ûCxlTypeÃ¶¾Ù) (Y) */
 } CancelOrderAlgo;
 
-/* æ¯å•å§”æ‰˜å›æŠ¥ç»“æ„ */
+/* Ä¸µ¥Î¯ÍĞ»Ø±¨½á¹¹ */
 typedef struct
 {
-  char   ExternalId[30];  /* è‡ªå®šä¹‰å§”æ‰˜ç¼–å· */
-  char   QuoteId[20];     /* ç³»ç»Ÿå§”æ‰˜ç¼–å· */
-  char   ClientName[255]; /* è´¦æˆ·åç§° */
-  char   Symbol[40];      /* è¯åˆ¸ä»£ç  */
-  char   SecType[3];      /* è¯åˆ¸ç±»å‹ (è§SecurityTypeæšä¸¾) */
-  char   SecExch[3];      /* äº¤æ˜“æ‰€ç±»å‹ (è§ExchangeTypeæšä¸¾) */
-  char   Side[3];         /* ä¹°å–æ–¹å‘ */
-  char   TransTime[17];   /* å§”æ‰˜æ—¶é—´ */
-  char   OrderQty[10];    /* å§”æ‰˜æ•°é‡ */
-  char   OrdType[6];      /* ç®—æ³•ç±»å‹ */
-  char   Price[10];       /* ä»·æ ¼ (ç²¾åº¦3) */
-  char   EffTime[17];     /* å¼€å§‹æ—¶é—´ */
-  char   ExpTime[17];     /* ç»“æŸæ—¶é—´ */
-  int8_t LimAction;       /* æ¶¨è·Œåœå¤„ç† */
-  int8_t AftAction;       /* è¿‡æœŸå¤„ç† */
-  char   AlgoParam[255];  /* ç­–ç•¥å‚æ•° */
-  char   CumQty[10];      /* ç´¯è®¡æˆäº¤æ•°é‡ */
-  char   LeavesQty[10];   /* å‰©ä½™æ•°é‡ */
-  char   OutstaQty[10];   /* æœªæˆäº¤æ•°é‡ */
-  char   AvgPx[10];       /* å¹³å‡æˆäº¤ä»· (ç²¾åº¦3) */
-  char   OrdStatus[3];    /* è®¢å•çŠ¶æ€ */
-  char   CxlType[3];      /* æ’¤å•ç±»å‹ */
-  char   BasketId[255];   /* ç¯®å­ç¼–å· */
-  char   Text[255];       /* å¤‡æ³¨ä¿¡æ¯ */
-  char   UpdateTime[17];  /* æ›´æ–°æ—¶é—´ */
+  char   ExternalId[30];  /* ×Ô¶¨ÒåÎ¯ÍĞ±àºÅ */
+  char   QuoteId[20];     /* ÏµÍ³Î¯ÍĞ±àºÅ */
+  char   ClientName[255]; /* ÕË»§Ãû³Æ */
+  char   Symbol[40];      /* Ö¤È¯´úÂë */
+  char   SecType[3];      /* Ö¤È¯ÀàĞÍ (¼ûSecurityTypeÃ¶¾Ù) */
+  char   SecExch[3];      /* ½»Ò×ËùÀàĞÍ (¼ûExchangeTypeÃ¶¾Ù) */
+  char   Side[3];         /* ÂòÂô·½Ïò */
+  char   TransTime[17];   /* Î¯ÍĞÊ±¼ä */
+  char   OrderQty[10];    /* Î¯ÍĞÊıÁ¿ */
+  char   OrdType[6];      /* Ëã·¨ÀàĞÍ */
+  char   Price[10];       /* ¼Û¸ñ (¾«¶È3) */
+  char   EffTime[17];     /* ¿ªÊ¼Ê±¼ä */
+  char   ExpTime[17];     /* ½áÊøÊ±¼ä */
+  int8_t LimAction;       /* ÕÇµøÍ£´¦Àí */
+  int8_t AftAction;       /* ¹ıÆÚ´¦Àí */
+  char   AlgoParam[255];  /* ²ßÂÔ²ÎÊı */
+  char   CumQty[10];      /* ÀÛ¼Æ³É½»ÊıÁ¿ */
+  char   LeavesQty[10];   /* Ê£ÓàÊıÁ¿ */
+  char   OutstaQty[10];   /* Î´³É½»ÊıÁ¿ */
+  char   AvgPx[10];       /* Æ½¾ù³É½»¼Û (¾«¶È3) */
+  char   OrdStatus[3];    /* ¶©µ¥×´Ì¬ */
+  char   CxlType[3];      /* ³·µ¥ÀàĞÍ */
+  char   BasketId[255];   /* Àº×Ó±àºÅ */
+  char   Text[255];       /* ±¸×¢ĞÅÏ¢ */
+  char   UpdateTime[17];  /* ¸üĞÂÊ±¼ä */
 } ReportOrderAlgo;
 
-/* å­å•å§”æ‰˜å›æŠ¥ç»“æ„ */
+/* ×Óµ¥Î¯ÍĞ»Ø±¨½á¹¹ */
 typedef struct
 {
-  char ExternalId[30];  /* è‡ªå®šä¹‰å§”æ‰˜ç¼–å· */
-  char QuoteId[20];     /* æ¯å•ç¼–å· */
-  char ClOrdId[20];     /* å­å•ç¼–å· */
-  char OrderId[20];     /* å¤–éƒ¨å§”æ‰˜ç¼–å· */
-  char ClientName[255]; /* è´¦æˆ·åç§° */
-  char TransTime[17];   /* å§”æ‰˜æ—¶é—´ */
-  char OrdStatus[3];    /* å§”æ‰˜çŠ¶æ€ */
-  char Symbol[40];      /* è¯åˆ¸ä»£ç  */
-  char Side[3];         /* ä¹°å–æ–¹å‘ */
-  char SecType[3];      /* è¯åˆ¸ç±»å‹ */
-  char SecExch[3];      /* äº¤æ˜“æ‰€ç±»å‹ */
-  char Price[10];       /* å§”æ‰˜ä»·æ ¼ */
-  char OrdType[6];      /* ç®—æ³•ç±»å‹ */
-  char OrderQty[10];    /* å§”æ‰˜æ•°é‡ */
-  char CumQty[10];      /* ç´¯è®¡æˆäº¤ */
-  char LeavesQty[10];   /* å‰©ä½™æ•°é‡ */
-  char AvgPx[10];       /* æˆäº¤å‡ä»· */
-  char UpdateTime[17];  /* æ›´æ–°æ—¶é—´ */
-  char Text[255];       /* å¤‡æ³¨ */
+  char ExternalId[30];  /* ×Ô¶¨ÒåÎ¯ÍĞ±àºÅ */
+  char QuoteId[20];     /* Ä¸µ¥±àºÅ */
+  char ClOrdId[20];     /* ×Óµ¥±àºÅ */
+  char OrderId[20];     /* Íâ²¿Î¯ÍĞ±àºÅ */
+  char ClientName[255]; /* ÕË»§Ãû³Æ */
+  char TransTime[17];   /* Î¯ÍĞÊ±¼ä */
+  char OrdStatus[3];    /* Î¯ÍĞ×´Ì¬ */
+  char Symbol[40];      /* Ö¤È¯´úÂë */
+  char Side[3];         /* ÂòÂô·½Ïò */
+  char SecType[3];      /* Ö¤È¯ÀàĞÍ */
+  char SecExch[3];      /* ½»Ò×ËùÀàĞÍ */
+  char Price[10];       /* Î¯ÍĞ¼Û¸ñ */
+  char OrdType[6];      /* Ëã·¨ÀàĞÍ */
+  char OrderQty[10];    /* Î¯ÍĞÊıÁ¿ */
+  char CumQty[10];      /* ÀÛ¼Æ³É½» */
+  char LeavesQty[10];   /* Ê£ÓàÊıÁ¿ */
+  char AvgPx[10];       /* ³É½»¾ù¼Û */
+  char UpdateTime[17];  /* ¸üĞÂÊ±¼ä */
+  char Text[255];       /* ±¸×¢ */
 } SubOrderAlgo;
 
-//èµ„é‡‘å›æŠ¥ dbfå­—æ®µ
+//×Ê½ğ»Ø±¨ dbf×Ö¶Î
 typedef struct ReportBalance
 {
-  char    ClientName[255];  // è´¦æˆ·åç§°
-  uint8_t EnBalance[23];    // .3f å¯ç”¨èµ„é‡‘
-  uint8_t CrBalance[23];    // .3f èèµ„å¯ç”¨èµ„é‡‘
-  uint8_t AssetAmt[23];     // .3f æ€»èµ„äº§
-  uint8_t MartketAmt[23];   // .3f æ€»å¸‚å€¼
-  char    UpdateTime[17];   // æ›´æ–°æ—¶é—´(20201217091705000)
+  char    ClientName[255];  // ÕË»§Ãû³Æ
+  uint8_t EnBalance[23];    // .3f ¿ÉÓÃ×Ê½ğ
+  uint8_t CrBalance[23];    // .3f ÈÚ×Ê¿ÉÓÃ×Ê½ğ
+  uint8_t AssetAmt[23];     // .3f ×Ü×Ê²ú
+  uint8_t MartketAmt[23];   // .3f ×ÜÊĞÖµ
+  char    UpdateTime[17];   // ¸üĞÂÊ±¼ä(20201217091705000)
 } RBRecord;
 
-//è¯åˆ¸æŒä»“å›æŠ¥ dbfå­—æ®µ
+//Ö¤È¯³Ö²Ö»Ø±¨ dbf×Ö¶Î
 typedef struct ReportPosition
 {
-  char    ClientName[255];  // è´¦æˆ·åç§°
-  uint8_t Exchange[3];      // è¯åˆ¸å¸‚åœº
-  char    Symbol[40];       // è¯åˆ¸ä»£ç 
-  uint8_t CurrentQ[10];     // å½“å‰æ•°é‡
-  uint8_t EnableQty[10];    // å¯ç”¨æ•°é‡
-  uint8_t ShortQty[10];     // èåˆ¸å¯ç”¨
-  char    UpdateTime[17];   // æ›´æ–°æ—¶é—´(20201217091705000)
+  char    ClientName[255];  // ÕË»§Ãû³Æ
+  uint8_t Exchange[3];      // Ö¤È¯ÊĞ³¡
+  char    Symbol[40];       // Ö¤È¯´úÂë
+  uint8_t CurrentQ[10];     // µ±Ç°ÊıÁ¿
+  uint8_t EnableQty[10];    // ¿ÉÓÃÊıÁ¿
+  uint8_t ShortQty[10];     // ÈÚÈ¯¿ÉÓÃ
+  char    UpdateTime[17];   // ¸üĞÂÊ±¼ä(20201217091705000)
 } RPRecord;
 
 #pragma pack(pop)

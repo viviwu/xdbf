@@ -6,9 +6,9 @@
 #include <string.h>
 #include <time.h>
 
-#pragma pack(push, 1)  // ç¡®ä¿ç»“æ„ä½“æŒ‰1å­—èŠ‚å¯¹é½
+#pragma pack(push, 1)  // È·±£½á¹¹Ìå°´1×Ö½Ú¶ÔÆë
 
-// DBFç‰ˆæœ¬ç±»å‹æšä¸¾ (ç‰ˆæœ¬å·ç¬¬ä¸€ä¸ªå­—èŠ‚)
+// DBF°æ±¾ÀàĞÍÃ¶¾Ù (°æ±¾ºÅµÚÒ»¸ö×Ö½Ú)
 typedef enum {
     DBF_VERSION_FOXBASE_1 = 0x02,            // FoxBASE
     DBF_VERSION_FOXBASE_DBASE3 = 0x03,       // dBASE III+/FoxBASE+/dBase III PLUS
@@ -24,117 +24,117 @@ typedef enum {
     DBF_VERSION_FOXBASE_DBASE3_MEMO = 0xFB,  // FoxBASE+/dBASE III PLUS with memo
 } DBF_Version;
 
-// DBFæ–‡ä»¶å¤´ç»“æ„ (32 bytes)
+// DBFÎÄ¼şÍ·½á¹¹ (32 bytes)
 typedef struct {
-    /* å­—èŠ‚ 0: ç‰ˆæœ¬å· (å‚è§DBF_Versionæšä¸¾) */
+    /* ×Ö½Ú 0: °æ±¾ºÅ (²Î¼ûDBF_VersionÃ¶¾Ù) */
     uint8_t version;
 
-    /* å­—èŠ‚ 1-3: æœ€åæ›´æ–°æ—¥æœŸ (YYMMDD)
-       YY: å¹´ä»½-1900 (å¦‚2021-1900=121)
+    /* ×Ö½Ú 1-3: ×îºó¸üĞÂÈÕÆÚ (YYMMDD)
+       YY: Äê·İ-1900 (Èç2021-1900=121)
        MM: 1-12
        DD: 1-31 */
     uint8_t last_update[3];
 
-    /* å­—èŠ‚ 4-7: æ–‡ä»¶ä¸­çš„è®°å½•æ•° (32ä½å°ç«¯) */
+    /* ×Ö½Ú 4-7: ÎÄ¼şÖĞµÄ¼ÇÂ¼Êı (32Î»Ğ¡¶Ë) */
     uint32_t num_records;
 
-    /* å­—èŠ‚ 8-9: æ–‡ä»¶å¤´å¤§å°(å­—èŠ‚) (16ä½å°ç«¯) åŒ…æ‹¬å¤´+å­—æ®µæè¿°+ç»ˆæ­¢ç¬¦
+    /* ×Ö½Ú 8-9: ÎÄ¼şÍ·´óĞ¡(×Ö½Ú) (16Î»Ğ¡¶Ë) °üÀ¨Í·+×Ö¶ÎÃèÊö+ÖÕÖ¹·û
      * Position of first data record */
     uint16_t header_size;
 
-    /* å­—èŠ‚ 10-11: æ¯æ¡è®°å½•å¤§å°(å­—èŠ‚) (16ä½å°ç«¯) */
+    /* ×Ö½Ú 10-11: Ã¿Ìõ¼ÇÂ¼´óĞ¡(×Ö½Ú) (16Î»Ğ¡¶Ë) */
     uint16_t record_size;
 
-    /* å­—èŠ‚ 12-13: ä¿ç•™ (ç”¨äºæ—©æœŸç‰ˆæœ¬å…¼å®¹æ€§) */
+    /* ×Ö½Ú 12-13: ±£Áô (ÓÃÓÚÔçÆÚ°æ±¾¼æÈİĞÔ) */
     uint16_t reserved1;
 
-    /* å­—èŠ‚ 14: äº‹åŠ¡æ ‡å¿— (0x00=æ— , 0x01=æœ‰æœªå®Œæˆäº‹åŠ¡) */
+    /* ×Ö½Ú 14: ÊÂÎñ±êÖ¾ (0x00=ÎŞ, 0x01=ÓĞÎ´Íê³ÉÊÂÎñ) */
     uint8_t incomplete_transaction;
 
-    /* å­—èŠ‚ 15: åŠ å¯†æ ‡å¿— (0x00=æœªåŠ å¯†, 0x01=åŠ å¯†) */
+    /* ×Ö½Ú 15: ¼ÓÃÜ±êÖ¾ (0x00=Î´¼ÓÃÜ, 0x01=¼ÓÃÜ) */
     uint8_t encryption_flag;
 
-    /* å­—èŠ‚ 16-27: å¤šç”¨æˆ·ç¯å¢ƒä¿ç•™ */
+    /* ×Ö½Ú 16-27: ¶àÓÃ»§»·¾³±£Áô */
     uint8_t multi_user_reserved[12];
 
-    /* å­—èŠ‚ 28: MDXæ ‡å¿— (0x00=æ— MDX, 0x01=æœ‰MDX) */
+    /* ×Ö½Ú 28: MDX±êÖ¾ (0x00=ÎŞMDX, 0x01=ÓĞMDX) */
     uint8_t mdx_flag;
 
-    /* å­—èŠ‚ 29: è¯­è¨€é©±åŠ¨ç¨‹åºID (å‚è§DBF_LanguageDriveræšä¸¾) */
+    /* ×Ö½Ú 29: ÓïÑÔÇı¶¯³ÌĞòID (²Î¼ûDBF_LanguageDriverÃ¶¾Ù) */
     uint8_t language_driver;
 
-    /* å­—èŠ‚ 30-31: ä¿ç•™ */
+    /* ×Ö½Ú 30-31: ±£Áô */
     uint16_t reserved3;
 } DBF_Header, DB_HEADER;
 
-// å­—æ®µæè¿°ç»“æ„ (32 bytes each)
+// ×Ö¶ÎÃèÊö½á¹¹ (32 bytes each)
 typedef struct {
-    /* å­—èŠ‚ 0-10: å­—æ®µå(ASCIIZ, ä»¥0x00ç»“å°¾) */
+    /* ×Ö½Ú 0-10: ×Ö¶ÎÃû(ASCIIZ, ÒÔ0x00½áÎ²) */
     char field_name[11];
 
-    /* å­—èŠ‚ 11: å­—æ®µç±»å‹ (å‚è§DBF_FieldTypeæšä¸¾) */
+    /* ×Ö½Ú 11: ×Ö¶ÎÀàĞÍ (²Î¼ûDBF_FieldTypeÃ¶¾Ù) */
     uint8_t field_type;
 
-    /* å­—èŠ‚ 12-15: Displacement of field in record */
+    /* ×Ö½Ú 12-15: Displacement of field in record */
     uint32_t field_address;
 
-    /* å­—èŠ‚ 16: å­—æ®µé•¿åº¦ (æœ€å¤§254) */
+    /* ×Ö½Ú 16: ×Ö¶Î³¤¶È (×î´ó254) */
     uint8_t field_length;
 
-    /* å­—èŠ‚ 17: å°æ•°ä½æ•°(æ•°å€¼å­—æ®µ) */
+    /* ×Ö½Ú 17: Ğ¡ÊıÎ»Êı(ÊıÖµ×Ö¶Î) */
     uint8_t decimal_count;
 
-    /* å­—èŠ‚ 18-19: ä¿ç•™ (ç”¨äºæ—©æœŸç‰ˆæœ¬å…¼å®¹æ€§) */
+    /* ×Ö½Ú 18-19: ±£Áô (ÓÃÓÚÔçÆÚ°æ±¾¼æÈİĞÔ) */
     uint16_t reserved1;
 
-    /* å­—èŠ‚ 20: å·¥ä½œåŒºID */
+    /* ×Ö½Ú 20: ¹¤×÷ÇøID */
     uint8_t work_area_id;
 
-    /* å­—èŠ‚ 21-22: ä¿ç•™ */
+    /* ×Ö½Ú 21-22: ±£Áô */
     uint16_t reserved2;
 
-    /* å­—èŠ‚ 23: SET FIELDSæ ‡å¿— (0x00=æœªè®¾ç½®, 0x01=å·²è®¾ç½®) */
+    /* ×Ö½Ú 23: SET FIELDS±êÖ¾ (0x00=Î´ÉèÖÃ, 0x01=ÒÑÉèÖÃ) */
     uint8_t set_fields_flag;
 
-    /* å­—èŠ‚ 24-30: ä¿ç•™ */
+    /* ×Ö½Ú 24-30: ±£Áô */
     uint8_t reserved3[7];
 
-    /* å­—èŠ‚ 31: MDXå­—æ®µæ ‡å¿— (0x00=ä¸åœ¨MDXä¸­, 0x01=åœ¨MDXä¸­) */
+    /* ×Ö½Ú 31: MDX×Ö¶Î±êÖ¾ (0x00=²»ÔÚMDXÖĞ, 0x01=ÔÚMDXÖĞ) */
     uint8_t mdx_flag;
 } DBF_FieldDescriptor, DB_FIELD;
 
-// æ–‡ä»¶ç»ˆæ­¢ç¬¦ (1 byte)
+// ÎÄ¼şÖÕÖ¹·û (1 byte)
 typedef struct {
-    /* å­—èŠ‚ 0: 0x0Dè¡¨ç¤ºå­—æ®µæè¿°ç»“æŸ */
+    /* ×Ö½Ú 0: 0x0D±íÊ¾×Ö¶ÎÃèÊö½áÊø */
     uint8_t terminator;
 } DBF_HeaderTerminator;
 
 #define DBF_RECORD_DELETED 0x2A
 #define DBF_RECORD_VALID 0x20
-// è®°å½•åˆ é™¤æ ‡å¿—å’Œå±æ€§å­˜å‚¨
+// ¼ÇÂ¼É¾³ı±êÖ¾ºÍÊôĞÔ´æ´¢
 typedef struct {
-    /* å­—èŠ‚ 0: åˆ é™¤æ ‡å¿—
-       0x20(ç©ºæ ¼)=æœªåˆ é™¤, 0x2A(*)=å·²åˆ é™¤ */
+    /* ×Ö½Ú 0: É¾³ı±êÖ¾
+       0x20(¿Õ¸ñ)=Î´É¾³ı, 0x2A(*)=ÒÑÉ¾³ı */
     uint8_t deleted_flag;
 
-    /* å­—èŠ‚ 1-n: å®é™…å­—æ®µæ•°æ®(å˜é•¿) */
+    /* ×Ö½Ú 1-n: Êµ¼Ê×Ö¶ÎÊı¾İ(±ä³¤) */
     uint8_t data[];
 } DBF_Record;
 
-// æ–‡ä»¶ç»“æŸæ ‡å¿— (1 byte)
+// ÎÄ¼ş½áÊø±êÖ¾ (1 byte)
 typedef struct {
-    /* å­—èŠ‚ 0: 0x1Aè¡¨ç¤ºæ–‡ä»¶ç»“æŸ */
+    /* ×Ö½Ú 0: 0x1A±íÊ¾ÎÄ¼ş½áÊø */
     uint8_t eof_marker;
 } DBF_EOFMarker;
 
-// æ—¥æœŸç±»å‹è½¬æ¢è¾…åŠ©ç»“æ„
+// ÈÕÆÚÀàĞÍ×ª»»¸¨Öú½á¹¹
 typedef struct {
-    uint8_t year;   // å¹´ä»½-1900
+    uint8_t year;   // Äê·İ-1900
     uint8_t month;  // 1-12
     uint8_t day;    // 1-31
 } DBF_Date;
 
-// è¯­è¨€é©±åŠ¨ç¨‹åºIDæšä¸¾
+// ÓïÑÔÇı¶¯³ÌĞòIDÃ¶¾Ù
 typedef enum {
     DBF_LANG_NONE = 0,
     DBF_LANG_US = 0x01,            // USA MS-DOS (OEM)
@@ -161,59 +161,59 @@ typedef enum {
     DBF_LANG_ARABIC = 0x7E,        // Arabic Windows (ANSI)
 } DBF_LanguageDriver;
 
-// å­—æ®µç±»å‹æšä¸¾
+// ×Ö¶ÎÀàĞÍÃ¶¾Ù
 typedef enum {
-    DBF_FIELD_CHAR = 'C',       // å­—ç¬¦å‹
-    DBF_FIELD_NUMERIC = 'N',    // æ•°å€¼å‹
-    DBF_FIELD_FLOAT = 'F',      // æµ®ç‚¹å‹
-    DBF_FIELD_DATE = 'D',       // æ—¥æœŸå‹ (YYYYMMDD)
-    DBF_FIELD_LOGICAL = 'L',    // é€»è¾‘å‹ (T/F/Y/N)
-    DBF_FIELD_MEMO = 'M',       // å¤‡æ³¨å‹
-    DBF_FIELD_BINARY = 'B',     // äºŒè¿›åˆ¶å‹
-    DBF_FIELD_GENERAL = 'G',    // é€šç”¨å‹(OLEå¯¹è±¡)
-    DBF_FIELD_PICTURE = 'P',    // å›¾ç‰‡å‹
-    DBF_FIELD_CURRENCY = 'Y',   // è´§å¸å‹
-    DBF_FIELD_DATETIME = 'T',   // æ—¥æœŸæ—¶é—´å‹
-    DBF_FIELD_INTEGER = 'I',    // æ•´å‹
-    DBF_FIELD_VARCHAR = 'V',    // å˜é•¿å­—ç¬¦å‹
-    DBF_FIELD_TIMESTAMP = '@',  // æ—¶é—´æˆ³
-    DBF_FIELD_DOUBLE = 'O',     // åŒç²¾åº¦æµ®ç‚¹
-    DBF_FIELD_AUTOINC = '+',    // è‡ªå¢å‹
+    DBF_FIELD_CHAR = 'C',       // ×Ö·ûĞÍ
+    DBF_FIELD_NUMERIC = 'N',    // ÊıÖµĞÍ
+    DBF_FIELD_FLOAT = 'F',      // ¸¡µãĞÍ
+    DBF_FIELD_DATE = 'D',       // ÈÕÆÚĞÍ (YYYYMMDD)
+    DBF_FIELD_LOGICAL = 'L',    // Âß¼­ĞÍ (T/F/Y/N)
+    DBF_FIELD_MEMO = 'M',       // ±¸×¢ĞÍ
+    DBF_FIELD_BINARY = 'B',     // ¶ş½øÖÆĞÍ
+    DBF_FIELD_GENERAL = 'G',    // Í¨ÓÃĞÍ(OLE¶ÔÏó)
+    DBF_FIELD_PICTURE = 'P',    // Í¼Æ¬ĞÍ
+    DBF_FIELD_CURRENCY = 'Y',   // »õ±ÒĞÍ
+    DBF_FIELD_DATETIME = 'T',   // ÈÕÆÚÊ±¼äĞÍ
+    DBF_FIELD_INTEGER = 'I',    // ÕûĞÍ
+    DBF_FIELD_VARCHAR = 'V',    // ±ä³¤×Ö·ûĞÍ
+    DBF_FIELD_TIMESTAMP = '@',  // Ê±¼ä´Á
+    DBF_FIELD_DOUBLE = 'O',     // Ë«¾«¶È¸¡µã
+    DBF_FIELD_AUTOINC = '+',    // ×ÔÔöĞÍ
 } DBF_FieldType;
 
-#pragma pack(pop)  // æ¢å¤é»˜è®¤å¯¹é½æ–¹å¼
+#pragma pack(pop)  // »Ö¸´Ä¬ÈÏ¶ÔÆë·½Ê½
 
-// ==================== è¾…åŠ©å‡½æ•°å®ç° ====================
+// ==================== ¸¨Öúº¯ÊıÊµÏÖ ====================
 
 /**
- * è§£æDBFæ—¥æœŸ(YYMMDD)ä¸ºtime_t
- * @param date DBFæ ¼å¼çš„3å­—èŠ‚æ—¥æœŸæ•°æ®
- * @return å¯¹åº”çš„time_tå€¼
+ * ½âÎöDBFÈÕÆÚ(YYMMDD)Îªtime_t
+ * @param date DBF¸ñÊ½µÄ3×Ö½ÚÈÕÆÚÊı¾İ
+ * @return ¶ÔÓ¦µÄtime_tÖµ
  */
 static inline time_t dbf_parse_date(const uint8_t date[3]) {
     struct tm tm = {0};
-    tm.tm_year = date[0] + 100;  // DBFå¹´ä»½=å®é™…-1900, tm_year=å®é™…-1900
-    tm.tm_mon = date[1] - 1;     // æœˆä»½0-11
+    tm.tm_year = date[0] + 100;  // DBFÄê·İ=Êµ¼Ê-1900, tm_year=Êµ¼Ê-1900
+    tm.tm_mon = date[1] - 1;     // ÔÂ·İ0-11
     tm.tm_mday = date[2];
     return mktime(&tm);
 }
 
 /**
- * æ ¼å¼åŒ–time_tä¸ºDBFæ—¥æœŸ(YYMMDD)
- * @param time æ—¶é—´å€¼
- * @param out_date è¾“å‡ºçš„3å­—èŠ‚DBFæ—¥æœŸ
+ * ¸ñÊ½»¯time_tÎªDBFÈÕÆÚ(YYMMDD)
+ * @param time Ê±¼äÖµ
+ * @param out_date Êä³öµÄ3×Ö½ÚDBFÈÕÆÚ
  */
 static inline void dbf_format_date(time_t time, uint8_t out_date[3]) {
     struct tm* tm = localtime(&time);
-    out_date[0] = tm->tm_year % 100;  // å–åä¸¤ä½å¹´ä»½
+    out_date[0] = tm->tm_year % 100;  // È¡ºóÁ½Î»Äê·İ
     out_date[1] = tm->tm_mon + 1;
     out_date[2] = tm->tm_mday;
 }
 
 /**
- * å­—æ®µç±»å‹è½¬å¯è¯»å­—ç¬¦ä¸²
- * @param type å­—æ®µç±»å‹å­—ç¬¦
- * @return ç±»å‹æè¿°å­—ç¬¦ä¸²
+ * ×Ö¶ÎÀàĞÍ×ª¿É¶Á×Ö·û´®
+ * @param type ×Ö¶ÎÀàĞÍ×Ö·û
+ * @return ÀàĞÍÃèÊö×Ö·û´®
  */
 static inline const char* dbf_field_type_to_str(uint8_t type) {
     switch (type) {

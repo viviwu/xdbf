@@ -5,14 +5,14 @@
  * @date 2020/5/16
  */
 
-#include "utils.h"
+#include "c_utils.h"
 
 #include <stdio.h>
 #include <sys/timeb.h>
 #include <time.h>
 
 
-int get_today_date(char* buffer, size_t size)
+int formatted_today_date(char* buffer, size_t size)
 {
   if (!buffer || size < DATE_BUFFER_SIZE)
     return UTILS_ERROR_INVALID_ARG;
@@ -29,29 +29,13 @@ int get_today_date(char* buffer, size_t size)
   return UTILS_SUCCESS;
 }
 
-int generate_order_algo_filename(char* buffer, size_t size)
-{
-  if (!buffer || size < FILENAME_BUFFER_SIZE)
-    return UTILS_ERROR_INVALID_ARG;
-
-  char date[DATE_BUFFER_SIZE];
-  int  ret = get_today_date(date, sizeof(date));
-  if (ret != UTILS_SUCCESS)
-    return ret;
-
-  if (snprintf(buffer, size, "OrderAlgo_%s.dbf", date) >= size)
-    return UTILS_ERROR_BUFFER_SIZE;
-
-  return UTILS_SUCCESS;
-}
-
-int generate_fixed_time_string(char* buffer, size_t size, const char* fixed_part)
+int today_fixed_time_string(char* buffer, size_t size, const char* fixed_part)
 {
   if (!buffer || !fixed_part || size < TIMESTAMP_MSEC_SIZE)
     return UTILS_ERROR_INVALID_ARG;
 
   char date[DATE_BUFFER_SIZE];
-  int  ret = get_today_date(date, sizeof(date));
+  int  ret = formatted_today_date(date, sizeof(date));
   if (ret != UTILS_SUCCESS)
     return ret;
 
@@ -61,7 +45,7 @@ int generate_fixed_time_string(char* buffer, size_t size, const char* fixed_part
   return UTILS_SUCCESS;
 }
 
-int generate_current_timestamp_second(char* buffer, size_t size)
+int formatted_current_timestamp_second(char* buffer, size_t size)
 {
   if (!buffer || size < TIMESTAMP_SEC_SIZE)
     return UTILS_ERROR_INVALID_ARG;
@@ -80,7 +64,7 @@ int generate_current_timestamp_second(char* buffer, size_t size)
   return UTILS_SUCCESS;
 }
 
-int generate_current_timestamp_millisecond(char* buffer, size_t size)
+int formatted_current_timestamp_millisecond(char* buffer, size_t size)
 {
   if (!buffer || size < TIMESTAMP_MSEC_SIZE)
     return UTILS_ERROR_INVALID_ARG;

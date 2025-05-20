@@ -6,17 +6,16 @@
 #include <assert.h>
 #include <atgo/atgo_struct.h>
 #include <libdbf/libdbf.h>
-#include "utils.h"
+#include "common/utils/c_utils.h"
+#include "common/3rd/libdbf/src/dbf.h"
 
 int main()
 {
-  char date[9];
-  get_today_date(date, sizeof(date));
-  printf("today:%s \n", date);
-  return 0;
+  printf("sizeof(DB_HEADER)=%zd \n", sizeof(DB_HEADER));
+  // printf("sizeof(DB_FIELD)=%d \n", sizeof(DB_FIELD));
 
   char filename[24] = {0};
-  generate_order_algo_filename(filename, sizeof(filename));
+  today_order_algo_filename(filename, sizeof(filename));
   printf("filename: %s\n", filename);
 
   char dbf_file_path[256];

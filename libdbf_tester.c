@@ -2,11 +2,12 @@
 // Created by wuxw on 2025/4/24/024.
 //
 
+#include <stdio.h>
 #include <assert.h>
 #include <atgo/atgo_struct.h>
 #include <libdbf/libdbf.h>
 
-#include "utils.h"
+#include "common/utils/c_utils.h"
 
 int main()
 {
@@ -22,11 +23,11 @@ int main()
   char timestamp_sec[15] = {0};
   char cur_timestamp[18] = {0};  //YYYYMMDDHHMMSSsss
 
-  generate_order_algo_filename(filename, sizeof(filename));
-  generate_fixed_time_string(eff_time, sizeof(eff_time), "093001000");
-  generate_fixed_time_string(exp_time, sizeof(exp_time), "145659000");
-  generate_current_timestamp_second(timestamp_sec, sizeof(timestamp_sec));
-  generate_current_timestamp_millisecond(cur_timestamp, sizeof(cur_timestamp));
+  today_order_algo_filename(filename, sizeof(filename));
+  today_fixed_time_string(eff_time, sizeof(eff_time), "093001000");
+  today_fixed_time_string(exp_time, sizeof(exp_time), "145659000");
+  formatted_current_timestamp_second(timestamp_sec, sizeof(timestamp_sec));
+  formatted_current_timestamp_millisecond(cur_timestamp, sizeof(cur_timestamp));
 
   printf("filename: %s\n", filename);
   printf("eff_time: %s\n", eff_time);

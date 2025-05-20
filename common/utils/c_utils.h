@@ -7,16 +7,17 @@
 * Provides date/time handling, filename generation and other common utilities
 */
 
-#ifndef XDBF_UTILS_H
-#define XDBF_UTILS_H
+#ifndef X_CSTR_UTILS_H
+#define X_CSTR_UTILS_H
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+#include <stdint.h>
+
 /* Constants */
 #define DATE_BUFFER_SIZE 9  // YYYYMMDD\0
-#define FILENAME_BUFFER_SIZE 24  // OrderAlgo_YYYYMMDD.dbf\0
 #define TIMESTAMP_SEC_SIZE 15  // YYYYMMDDHHMMSS\0
 #define TIMESTAMP_MSEC_SIZE 18  // YYYYMMDDHHMMSSsss\0
 
@@ -31,15 +32,7 @@ extern "C" {
  * @param[in] size Buffer size
  * @return int UTILS_SUCCESS on success, error code on failure
  */
-int get_today_date(char* buffer, size_t size);
-
-/**
- * @brief Generate OrderAlgo filename
- * @param[out] buffer Output buffer
- * @param[in] size Buffer size
- * @return int UTILS_SUCCESS on success, error code on failure
- */
-int generate_order_algo_filename(char* buffer, size_t size);
+int formatted_today_date(char* buffer, size_t size);
 
 /**
  * @brief Generate fixed time string
@@ -48,7 +41,7 @@ int generate_order_algo_filename(char* buffer, size_t size);
  * @param[in] fixed_part Fixed time part to append
  * @return int UTILS_SUCCESS on success, error code on failure
  */
-int generate_fixed_time_string(char* buffer, size_t size, const char* fixed_part);
+int today_fixed_time_string(char* buffer, size_t size, const char* fixed_part);
 
 /**
  * @brief Generate current timestamp (second precision)
@@ -56,7 +49,7 @@ int generate_fixed_time_string(char* buffer, size_t size, const char* fixed_part
  * @param[in] size Buffer size
  * @return int UTILS_SUCCESS on success, error code on failure
  */
-int generate_current_timestamp_second(char* buffer, size_t size);
+int formatted_current_timestamp_second(char* buffer, size_t size);
 
 /**
  * @brief Generate current timestamp (millisecond precision)
@@ -64,10 +57,10 @@ int generate_current_timestamp_second(char* buffer, size_t size);
  * @param[in] size Buffer size
  * @return int UTILS_SUCCESS on success, error code on failure
  */
-int generate_current_timestamp_millisecond(char* buffer, size_t size);
+int formatted_current_timestamp_millisecond(char* buffer, size_t size);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* XDBF_UTILS_H */
+#endif /* X_CSTR_UTILS_H */
