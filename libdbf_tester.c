@@ -4,7 +4,7 @@
 
 #include <stdio.h>
 #include <assert.h>
-#include <atgo/atgo_struct.h>
+#include <atx/atx_struct.h>
 #include <libdbf/libdbf.h>
 
 #include "common/utils/c_utils.h"

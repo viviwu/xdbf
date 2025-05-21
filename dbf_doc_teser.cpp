@@ -8,8 +8,8 @@
 #include <string>
 #include <vector>
 
-#include "atgo/at_util.h"
-#include "atgo/atgo_struct.h"
+#include "atx/at_util.h"
+#include "atx/atx_struct.h"
 #include "common/utils/c_utils.h"
 #include "dbf_doc.h"
 

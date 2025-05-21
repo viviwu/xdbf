@@ -618,9 +618,8 @@ int dbf_WriteRecord(P_DBF *p_dbf, char *record, int len)
 {
   if (len != p_dbf->header->record_length - 1)
   {
-    fprintf(stderr, _("Length of record mismatches expected length (%d != %d)."), len,
+    fprintf(stderr, _("Length of record mismatches expected length (%d != %d). \n"), len,
             p_dbf->header->record_length - 1);
-    fprintf(stderr, "\n");
     return -1;
   }
   /**
@@ -686,8 +685,7 @@ int dbf_WriteRecordWithFlag(P_DBF *p_dbf, char *record, int len)
   // Validate record length
   if (len != p_dbf->header->record_length)
   {
-    fprintf(stderr, _("Length of record mismatches expected length (%d != %d)."), len, p_dbf->header->record_length);
-    fprintf(stderr, "\n");
+    fprintf(stderr, _("Length of record mismatches expected length (%d != %d). \n"), len, p_dbf->header->record_length);
     return -1;
   }
 
