@@ -4,7 +4,7 @@
  * Routines for Little Endian and Big Endian Systems
  * Library version
  *
- * Author: Björn Berg <clergyman@gmx.de>, Uwe Steinmann <uwe@steinmann.cx>
+ * Author: Bjoern Berg <clergyman@gmx.de>, Uwe Steinmann <uwe@steinmann.cx>
  *
  *****************************************************************************
  * $Id: dbf_endian.c,v 1.3 2004/09/09 10:32:22 steinm Exp $

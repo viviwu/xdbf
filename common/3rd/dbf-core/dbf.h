@@ -62,20 +62,20 @@
  */
 
 extern unsigned int verbosity;
-extern char *tablename;
+extern char* tablename;
 
 /*
  *	FUNCTIONS
  */
 
-typedef int	(*headerMethod)(FILE *output, P_DBF * p_dbf,
-    const char *filename, const char *export_filename);
+typedef int (*headerMethod)(FILE* output, P_DBF* p_dbf,
+                            const char* filename, const char* export_filename);
 
-typedef int	(*footerMethod)(FILE *output, P_DBF * p_dbf,
-    const char *filename, const char *export_filename);
+typedef int (*footerMethod)(FILE* output, P_DBF* p_dbf,
+                            const char* filename, const char* export_filename);
 
-typedef int	(*lineMethod)(FILE *output, P_DBF * p_dbf,
-    const unsigned char *value, int header_length,
-    const char *filename, const char *export_filename);
+typedef int (*lineMethod)(FILE* output, P_DBF* p_dbf,
+                          const unsigned char* value, int header_length,
+                          const char* filename, const char* export_filename);
 
 #endif

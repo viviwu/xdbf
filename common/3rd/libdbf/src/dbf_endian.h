@@ -5,7 +5,7 @@
  * Library version
  *
  * Version 0.4, 2003-09-08
- * Author: Björn Berg, clergyman@gmx.de
+ * Author: Bjoern Berg, clergyman@gmx.de
  *
  ****************************************************************************
  * $Id: dbf_endian.h,v 1.2 2004/09/09 10:32:22 steinm Exp $

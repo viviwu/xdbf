@@ -3,7 +3,7 @@
  *****************************************************************************
  * Library to read information from dBASE files
  * Author: Bjoern Berg, clergyman@gmx.de
- * (C) Copyright 2004, Bj鰎n Berg
+ * (C) Copyright 2004, Bjoern Berg
  *
  *****************************************************************************
  * Permission to use, copy, modify and distribute this software and its
@@ -87,8 +87,7 @@ typedef unsigned short u_int16_t;
      dBASE except dBASE 7.0
     \warning It is recommend not to access DB_HEADER directly.
  */
-typedef struct
-{
+typedef struct {
   /*! Byte: 0; dBase version */
   unsigned char version;
   /*! Byte: 1-3; date of last update */
@@ -120,8 +119,7 @@ typedef struct
     Offsets of this header are the same in all versions of dBASE
     \warning It is recommend not to access DB_FIELD directly.
  */
-struct _DB_FIELD
-{
+struct _DB_FIELD {
   /*! Byte: 0-10; fieldname in ASCII */
   unsigned char field_name[11];
   /*! Byte: 11; field type in ASCII (C,Y,N, D, L, M or N) */
@@ -137,6 +135,7 @@ struct _DB_FIELD
   /*! Byte: 31; Production MDX field flag */
   unsigned char mdx;
 };
+
 typedef struct _DB_FIELD DB_FIELD;
 /*! \struct P_DBF
     \brief P_DBF is a global file handler
@@ -144,8 +143,7 @@ typedef struct _DB_FIELD DB_FIELD;
     P_DBF store the file handlers for the dbf-file and if exists
     the appropriate memo file.
 */
-struct _P_DBF
-{
+struct _P_DBF {
   /*! filehandler of *.dbf */
   int dbf_fh;
   /*! filehandler of memo */
@@ -155,9 +153,9 @@ struct _P_DBF
   /*! the calculated filesize */
   u_int32_t calc_filesize;
   /*! header of .dbf file */
-  DB_HEADER *header;
+  DB_HEADER* header;
   /*! array of field specification */
-  DB_FIELD *fields;
+  DB_FIELD* fields;
   /*! number of fields */
   u_int32_t columns;
   /*! integrity could be: valid, invalid */
@@ -168,8 +166,7 @@ struct _P_DBF
   char errmsg[254];
 };
 
-struct DB_MEMO_HEADER
-{
+struct DB_MEMO_HEADER {
   /* 00  03	Location of next free block [1] */
   unsigned int block_adress;
   /* 04  05	Unused */
@@ -184,8 +181,7 @@ struct DB_MEMO_HEADER
  significant byte first. See: endian.h   */
 
 /* Memo Block Header and Memo Text */
-struct DB_MEMO_BLOCK_TOP
-{
+struct DB_MEMO_BLOCK_TOP {
   /* 00  03			Block signature [1]  */
   /*	(indicates the type of data in the block)
 	 *	0  picture (picture field type)

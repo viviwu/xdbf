@@ -120,7 +120,7 @@ typedef struct _DB_FIELD DB_FIELD;
 	\brief return the version of dbf file as a human readable string
 	\param *p_dbf the object handle of the opened file
 */
-const char *dbf_GetStringVersion(P_DBF *p_dbf);
+const char* dbf_GetStringVersion(P_DBF* p_dbf);
 
 /*! \fn dbf_GetVersion(P_DBF *p_dbf)
 	\brief return the version of dbf file
@@ -128,7 +128,7 @@ const char *dbf_GetStringVersion(P_DBF *p_dbf);
 
 	\return version or -1 on error
 */
-int dbf_GetVersion(P_DBF *p_dbf);
+int dbf_GetVersion(P_DBF* p_dbf);
 
 /*! \fn P_DBF *dbf_Open (const char *file)
 	\brief dbf_Open opens a dBASE \a file and returns the object handle
@@ -139,7 +139,7 @@ int dbf_GetVersion(P_DBF *p_dbf);
 	internally.
 	\return NULL in case of an error.
 */
-P_DBF *dbf_Open(const char *file, bool read_only);
+P_DBF* dbf_Open(const char* file, bool read_only);
 
 
 /*! \fn P_DBF *dbf_CreateFH (int fh, DB_FIELD *fields, int numfields)
@@ -151,7 +151,7 @@ P_DBF *dbf_Open(const char *file, bool read_only);
 	Creates a dBASE file and returns the object handle.
 	\return NULL in case of an error.
 */
-P_DBF *dbf_CreateFH(int fh, DB_FIELD *fields, int numfields);
+P_DBF* dbf_CreateFH(int fh, DB_FIELD* fields, int numfields);
 
 /*! \fn P_DBF *dbf_Create (const char *file, DB_FIELD *fields, int numfields)
 	\brief dbf_Create opens a new dBASE \a file and returns the object handle
@@ -162,7 +162,7 @@ P_DBF *dbf_CreateFH(int fh, DB_FIELD *fields, int numfields);
 	Creates a dBASE file and returns the object handle.
 	\return NULL in case of an error.
 */
-P_DBF *dbf_Create(const char *file, DB_FIELD *fields, int numfields);
+P_DBF* dbf_Create(const char* file, DB_FIELD* fields, int numfields);
 
 /*! \fn int dbf_Close (P_DBF *p_dbf)
 	\brief dbf_Close closes a dBASE file.
@@ -171,7 +171,7 @@ P_DBF *dbf_Create(const char *file, DB_FIELD *fields, int numfields);
 	Closes a dBASE file and frees all memory.
 	\return 0 if closing was successful and -1 if not.
 */
-int dbf_Close(P_DBF *p_dbf);
+int dbf_Close(P_DBF* p_dbf);
 
 // Functions to info about rows and columns
 /*! \fn int dbf_NumRows (P_DBF *p_dbf)
@@ -181,7 +181,7 @@ int dbf_Close(P_DBF *p_dbf);
 	Returns the number of datasets/rows.
 	\return Number of rows or -1 in case of an error.
 */
-int dbf_NumRows(P_DBF *p_dbf);
+int dbf_NumRows(P_DBF* p_dbf);
 
 /*! \fn int dbf_NumCols (P_DBF *p_dbf)
 	\brief dbf_NumCols returns the number of attributes/columns
@@ -190,7 +190,7 @@ int dbf_NumRows(P_DBF *p_dbf);
 	Returns the number of fields/columns.
 	\return Number of columns or -1 in case of an error.
 */
-int dbf_NumCols(P_DBF *p_dbf);
+int dbf_NumCols(P_DBF* p_dbf);
 
 /*! \fn const char *dbf_ColumnName(P_DBF *p_dbf, int column)
 	\brief dbf_ColumnName returns the name of a selected \a column
@@ -202,7 +202,7 @@ int dbf_NumCols(P_DBF *p_dbf);
 	be determined with \ref dbf_NumCols.
 	\return Name of column or -1 on error
 */
-const char *dbf_ColumnName(P_DBF *p_dbf, int column);
+const char* dbf_ColumnName(P_DBF* p_dbf, int column);
 
 /*! \fn int dbf_ColumnSize(P_DBF *p_dbf, int column);
 	\brief dbf_ColumnSize returns the field length of a column
@@ -214,7 +214,7 @@ const char *dbf_ColumnName(P_DBF *p_dbf, int column);
 	be determined with \ref dbf_NumCols.
 	\return field length of column or -1 on error
 */
-int dbf_ColumnSize(P_DBF *p_dbf, int column);
+int dbf_ColumnSize(P_DBF* p_dbf, int column);
 
 /*! \fn const char dbf_ColumnType(P_DBF *p_dbf, int column)
 	\brief dbf_ColumnType returns the type of a field resp. column
@@ -228,7 +228,7 @@ int dbf_ColumnSize(P_DBF *p_dbf, int column);
 	be determined with \ref dbf_NumCols.
 	\return field type of column or -1 on error
 */
-const char dbf_ColumnType(P_DBF *p_dbf, int column);
+const char dbf_ColumnType(P_DBF* p_dbf, int column);
 
 /*! \fn int dbf_ColumnDecimals(P_DBF *p_dbf, int column)
 	\brief
@@ -241,7 +241,7 @@ const char dbf_ColumnType(P_DBF *p_dbf, int column);
 	be determined with \ref dbf_NumCols.
 	\return Number of decimals of column or -1 on error
 */
-int dbf_ColumnDecimals(P_DBF *p_dbf, int column);
+int dbf_ColumnDecimals(P_DBF* p_dbf, int column);
 
 /*! \fn u_int32_t dbf_ColumnAddress(P_DBF *p_dbf, int column)
 	\brief dbf_ColumnAddress returns the address of a column
@@ -252,7 +252,7 @@ int dbf_ColumnDecimals(P_DBF *p_dbf, int column);
 	be determined with \ref dbf_NumCols.
 	\return Address of column or -1 on error
 */
-u_int32_t dbf_ColumnAddress(P_DBF *p_dbf, int column);
+u_int32_t dbf_ColumnAddress(P_DBF* p_dbf, int column);
 
 /*! \fn const char *dbf_GetDate(P_DBF *p_dbf)
 	\brief dbf_GetDate returns a formatted date string
@@ -265,7 +265,7 @@ u_int32_t dbf_ColumnAddress(P_DBF *p_dbf, int column);
 	\return formatted date or -1 on error
 */
 
-const char *dbf_GetDate(P_DBF *p_dbf);
+const char* dbf_GetDate(P_DBF* p_dbf);
 
 /*! \fn int dbf_SetField(DB_FIELD *field, int type, const char *name, int len, int dec)
 	\brief dbf_SetField fills a field structure
@@ -279,7 +279,7 @@ const char *dbf_GetDate(P_DBF *p_dbf);
 
 	\return 0 
 */
-int dbf_SetField(DB_FIELD *field, int type, const char *name, int len, int dec);
+int dbf_SetField(DB_FIELD* field, int type, const char* name, int len, int dec);
 
 /*! \fn int dbf_RecordLength(P_DBF *p_dbf)
 	\brief dbf_RecordLength returns length of a dataset
@@ -290,7 +290,7 @@ int dbf_SetField(DB_FIELD *field, int type, const char *name, int len, int dec);
 
 	\return record length or -1 on error
 */
-int dbf_RecordLength(P_DBF *p_dbf);
+int dbf_RecordLength(P_DBF* p_dbf);
 
 /*! \fn int dbf_HeaderSize(P_DBF *p_dbf)
 	\brief dbf_HeaderSize returns length of the header
@@ -300,7 +300,7 @@ int dbf_RecordLength(P_DBF *p_dbf);
 
 	\return header length or -1 on error
 */
-int dbf_HeaderSize(P_DBF *p_dbf);
+int dbf_HeaderSize(P_DBF* p_dbf);
 
 /*! \fn int dbf_SetRecordOffset(P_DBF *p_dbf, int offset)
 	\brief dbf_SetRecordOffset set the internal record counter
@@ -317,7 +317,7 @@ int dbf_HeaderSize(P_DBF *p_dbf);
 
 	\return the new internal record counter or -1 in case of an error
 */
-int dbf_SetRecordOffset(P_DBF *p_dbf, int offset);
+int dbf_SetRecordOffset(P_DBF* p_dbf, int offset);
 
 /*! \fn int dbf_ReadRecord(P_DBF *p_dbf, char *record, int len)
 	\brief dbf_ReadRecord reads the current record
@@ -330,11 +330,11 @@ int dbf_SetRecordOffset(P_DBF *p_dbf, int offset);
 
 	\return 0 if successful, -1 on error
 */
-int dbf_ReadRecord(P_DBF *p_dbf, char *record, int len);
+int dbf_ReadRecord(P_DBF* p_dbf, char* record, int len);
 
-char *dbf_GetRecordData(P_DBF *p_dbf, char *record, int column);
+char* dbf_GetRecordData(P_DBF* p_dbf, char* record, int column);
 
-void dbf_GetRecordValue(P_DBF *p_dbf, char *record, int column, char *val);
+void dbf_GetRecordValue(P_DBF* p_dbf, char* record, int column, char* val);
 
 /*! \fn int dbf_WriteRecord(P_DBF *p_dbf, char *record, int len)
 	\brief dbf_WriteRecord writes a record
@@ -349,7 +349,7 @@ void dbf_GetRecordValue(P_DBF *p_dbf, char *record, int column, char *val);
 
 	\return number of records written, -1 on error
 */
-int dbf_WriteRecord(P_DBF *p_dbf, char *record, int len);
+int dbf_WriteRecord(P_DBF* p_dbf, char* record, int len);
 
 /*! \fn int dbf_IsMemo(P_DBF *p_dbf)
 	\brief dbf_IsMemo tells if dbf provides also a memo file
@@ -360,6 +360,6 @@ int dbf_WriteRecord(P_DBF *p_dbf, char *record, int len);
 	\return 0 no memo, 1 memo, -1 on error
 */
 
-int dbf_WriteRecordWithFlag(P_DBF *p_dbf, char *record, int len);
+int dbf_WriteRecordWithFlag(P_DBF* p_dbf, char* record, int len);
 
-int dbf_IsMemo(P_DBF *p_dbf);
+int dbf_IsMemo(P_DBF* p_dbf);

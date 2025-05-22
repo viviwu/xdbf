@@ -49,6 +49,8 @@ public:
   // File Operations
   bool open(const std::string& filename, bool readOnly = true);
 
+  const std::vector<DB_FIELD>& getFields() const { return fields_; }
+
   bool create(const std::string& filename, const std::vector<DB_FIELD>& fields);
 
   bool save();
@@ -113,6 +115,42 @@ private:
   static bool isValidFieldType(char type);
 
   static uint16_t calculateRecordLength(const std::vector<DB_FIELD>& fields);
+
+private:
+  // Endian conversion helpers
+  static uint16_t swapBytes16(uint16_t value) {
+      return (value << 8) | (value >> 8);
+  }
+
+  static uint32_t swapBytes32(uint32_t value) {
+      return  ((value & 0xFF000000) >> 24) |
+              ((value & 0x00FF0000) >> 8)  |
+              ((value & 0x0000FF00) << 8)  |
+              ((value & 0x000000FF) << 24);
+  }
+
+  static bool isBigEndian() {
+      static const uint16_t test = 0x0001;
+      return *reinterpret_cast<const uint8_t*>(&test) == 0;
+  }
+
+  // Convert from little-endian (file) to host byte order
+  static uint16_t leToHost16(uint16_t value) {
+      return isBigEndian() ? swapBytes16(value) : value;
+  }
+
+  static uint32_t leToHost32(uint32_t value) {
+      return isBigEndian() ? swapBytes32(value) : value;
+  }
+
+  // Convert from host byte order to little-endian (file)
+  static uint16_t hostToLe16(uint16_t value) {
+      return isBigEndian() ? swapBytes16(value) : value;
+  }
+
+  static uint32_t hostToLe32(uint32_t value) {
+      return isBigEndian() ? swapBytes32(value) : value;
+  }
 
 private:
   // Member variables

@@ -3,7 +3,7 @@
  *****************************************************************************
  * Library to read information from dBASE files
  * Author: Bjoern Berg, clergyman@gmx.de
- * (C) Copyright 2004, Bj�rn Berg
+ * (C) Copyright 2004, Bjoern Berg
  *
  *****************************************************************************
  * Permission to use, copy, modify and distribute this software and its
